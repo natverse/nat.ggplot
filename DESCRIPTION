@@ -1,0 +1,45 @@
+Type: Package
+Package: nat.ggplot
+Title: Functions for creating neuroanatomy plots with ggplot2 + nat
+Version: 0.1.0
+Date: 2024-07-11
+Authors@R: 
+    c(person(given = "Alexander",
+           family = "Bates",
+           role = c("aut", "cre"),
+           email = "alexander.shakeel.bates@gmail.com",
+           comment = c(ORCID = "0000-0002-1195-0445")))
+Description: Functions for creating neuroanatomy plots in the ggplot2 style.
+License: GPL-3 + file LICENSE
+URL: https://github.com/natverse/bancr, https://natverse.github.io/nat.ggplot/
+BugReports: https://github.com/natverse/nat.ggplot/issues
+Depends: 
+    R (>= 3.5.0),
+    ggplot2 (>= 3.5)
+Imports: 
+    nat,
+    dplyr,
+    rlang,
+    ggnewscale,
+    rgl
+Suggests: 
+    testthat (>= 3.0.0),
+    readobj,
+    Rvcg,
+    Morpho,
+    rmarkdown,
+    spelling,
+    catmaid,
+    rgl,
+    hemibrainr
+Remotes: 
+    natverse/nat,
+    tidyverse/ggplot2,
+    eliocamp/ggnewscale
+Config/testthat/edition: 3
+LazyDataCompression: xz
+Encoding: UTF-8
+Language: en-GB
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
