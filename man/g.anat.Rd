@@ -34,12 +34,12 @@ Simply add your geom_neuron() layers to this base object.
 library(nat.ggplot)
 
 # Use g.anat as the base for plotting neurons
-g.anat + 
+g.anat +
   geom_neuron(banc.skels, rotation_matrix = banc_view)
 
 # Add multiple layers
 g.anat +
-  geom_neuron(banc.brain_neuropil_lowres, 
+  geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
               cols = c("grey95", "grey85"),
               alpha = 0.3) +

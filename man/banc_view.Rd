@@ -34,12 +34,12 @@ ggplot() +
   geom_neuron(banc.skels, rotation_matrix = banc_view)
 
 # Create a custom view interactively
-plot3d(banc.brain_neuropil_lowres)
+plot3d(banc.brain_neuropil)
 # Rotate to desired angle with mouse
 my_view <- rgl_view()$userMatrix
 # Use custom view
 ggplot() + 
-  geom_neuron(banc.brain_neuropil_lowres, rotation_matrix = my_view)
+  geom_neuron(banc.brain_neuropil, rotation_matrix = my_view)
 }
 }
 \keyword{datasets}

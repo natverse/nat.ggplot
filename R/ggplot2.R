@@ -15,28 +15,31 @@
 #' @return A data frame with columns X, Y, Z, and group, where each group
 #' represents a continuous path in the neuron or a polygon in the mesh.
 #'
+#' @seealso
+#' \code{\link{rgl_view}} for a way to obtain `rotation_matrix`
+#'
 #' @examples
 #' \dontrun{
 #' library(nat.ggplot)
-#' 
+#'
 #' # Convert a single neuron to ggplot2-compatible format
 #' neuron_data <- ggplot2_neuron_path(banc.skels[[1]])
 #' head(neuron_data)
-#' 
+#'
 #' # Plot with g.anat base
-#' g.anat + 
-#'   geom_path(data = neuron_data, 
+#' g.anat +
+#'   geom_path(data = neuron_data,
 #'             aes(x = X, y = Y, group = group))
-#' 
+#'
 #' # Apply rotation matrix
-#' neuron_rotated <- ggplot2_neuron_path(banc.skels[[1]], 
+#' neuron_rotated <- ggplot2_neuron_path(banc.skels[[1]],
 #'                                        rotation_matrix = banc_view)
-#' 
+#'
 #' # Convert neuronlist
 #' neuronlist_data <- ggplot2_neuron_path(banc.skels)
-#' 
+#'
 #' # Convert mesh3d object
-#' mesh_data <- ggplot2_neuron_path(banc.brain_neuropil_lowres)
+#' mesh_data <- ggplot2_neuron_path(banc.brain_neuropil)
 #' }
 #'
 #' @export
@@ -139,6 +142,7 @@ ggplot2_neuron_path.NULL <- function(x, rotation_matrix = NULL, ...) {
 #' @param rotation_matrix An optional 4x4 rotation matrix to apply to the neuron coordinates.
 #' @param root Numeric, if >0 and x is or contains `neuron` objects,
 #' then the root node is plotted as a dot of size `root`. If `FALSE` or `0` no root node is plotted.
+#' @param size Numeric, the line width for neuron skeleton paths. Default is 0.5.
 #' @param cols The colour to plot the neurons in. If \code{length(cols)==length(x)} each neuron will be coloured
 #' by its index in `x` applied to `cols`.
 #' @param stat The statistical transformation to use on the data for this layer.
@@ -154,31 +158,31 @@ ggplot2_neuron_path.NULL <- function(x, rotation_matrix = NULL, ...) {
 #' @examples
 #' \dontrun{
 #' library(nat.ggplot)
-#' 
+#'
 #' # Plot a single neuron
-#' g.anat + 
+#' g.anat +
 #'   geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
-#' 
+#'
 #' # Plot all neurons with custom colours
-#' g.anat + 
-#'   geom_neuron(banc.skels, 
+#' g.anat +
+#'   geom_neuron(banc.skels,
 #'               rotation_matrix = banc_view,
 #'               cols = c("purple", "magenta"))
-#' 
+#'
 #' # Plot brain mesh as context
-#' g.anat + 
-#'   geom_neuron(banc.brain_neuropil_lowres, 
+#' g.anat +
+#'   geom_neuron(banc.brain_neuropil,
 #'               rotation_matrix = banc_view,
 #'               cols = c("grey75", "grey50"),
 #'               alpha = 0.3)
-#' 
+#'
 #' # Plot split neurons showing axon/dendrite
-#' g.anat + 
-#'   geom_neuron(bc.neurons.flow[[1]], 
+#' g.anat +
+#'   geom_neuron(bc.neurons.flow[[1]],
 #'               rotation_matrix = banc_view)
-#' 
+#'
 #' # Plot synapses as points
-#' g.anat + 
+#' g.anat +
 #'   geom_neuron(as.matrix(banc.syns[, c("X", "Y", "Z")]),
 #'               rotation_matrix = banc_view,
 #'               root = 0.5,
@@ -191,6 +195,7 @@ ggplot2_neuron_path.NULL <- function(x, rotation_matrix = NULL, ...) {
 geom_neuron <- function(x = NULL,
                         rotation_matrix = NULL,
                         root = 3,
+                        size = 0.5,
                         cols = c("navy", "turquoise"),
                         stat = "identity",
                         position = "identity",
@@ -206,6 +211,7 @@ geom_neuron <- function(x = NULL,
 geom_neuron.neuron <- function(x = NULL,
                                rotation_matrix = NULL,
                                root = 3,
+                               size = 0.5,
                                cols = c("navy", "turquoise"),
                                stat = "identity",
                                position = "identity",
@@ -232,11 +238,20 @@ geom_neuron.neuron <- function(x = NULL,
   list(
     ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, color = .data$Z, group = .data$group),
                        data = x,
-                       stat = stat, position = position, na.rm = na.rm,
-                       show.legend = show.legend, inherit.aes = inherit.aes, ...),
-    ggplot2::geom_point(mapping = ggplot2::aes(x = .data$X, y = .data$Y), data = soma,
-                        color = cols[1], alpha = 0.5, size = root),
-    ggplot2::scale_color_gradient(low = cols[1], high = cols[length(cols)]),
+                       linewidth = size,
+                       stat = stat,
+                       position = position,
+                       na.rm = na.rm,
+                       show.legend = show.legend,
+                       inherit.aes = inherit.aes,
+                       ...),
+    ggplot2::geom_point(mapping = ggplot2::aes(x = .data$X, y = .data$Y),
+                        data = soma,
+                        color = cols[1],
+                        size = root,
+                        ...),
+    ggplot2::scale_color_gradient(low = cols[1],
+                                  high = cols[length(cols)]),
     ggnewscale::new_scale_colour()
   )
 }
@@ -247,6 +262,7 @@ geom_neuron.neuron <- function(x = NULL,
 geom_neuron.neuronlist <- function(x = NULL,
                                    rotation_matrix = NULL,
                                    root = 3,
+                                   size = 0.5,
                                    cols = c("navy", "turquoise"),
                                    stat = "identity",
                                    position = "identity",
@@ -256,25 +272,43 @@ geom_neuron.neuronlist <- function(x = NULL,
                                    threshold = Inf,
                                    ...) {
   glist <- list()
+
+  # Handle empty neuronlist
+  if(length(x) == 0){
+    return(list(ggplot2::geom_blank()))
+  }
+
   if(length(x)!=1){
     if(cols[1]=="rainbow"){
       cols <- grDevices::rainbow(length(x))
     }else if(length(cols)==1){
       cols <- rep(cols, length(x))
+    }else if(length(cols)==length(x)){
+      cols <- cols
     }else{
-      cols <- grDevices::colorRampPalette(c(cols[1], cols[length(cols)]))(length(x))
+      cols <- grDevices::colorRampPalette(c(cols))(length(x))
     }
     for(i in 1:length(x)){
-      glist[[i]] <- geom_neuron(x = x[[i]], rotation_matrix = rotation_matrix, cols = cols[i],
-                                stat = stat, position = position, na.rm = na.rm, show.legend = show.legend,
-                                inherit.aes = FALSE, ...)
+      glist[[i]] <- geom_neuron(x = x[[i]],
+                                rotation_matrix = rotation_matrix,
+                                cols = cols[i],
+                                root = root,
+                                size = size,
+                                stat = stat,
+                                position = position,
+                                na.rm = na.rm,
+                                show.legend = show.legend,
+                                inherit.aes = FALSE,
+                                threshold = threshold,
+                                ...)
     }
   }else{
     if(cols[1]=="rainbow"){
-      cols <-c("purple","pink")
+      cols <-c("#6D2C7B", "#FF1493")
     }
     for(i in 1:length(x)){
       glist[[i]] <- geom_neuron(x = x[[i]], rotation_matrix = rotation_matrix, cols = cols,
+                                root = root, size = size,
                                 stat = stat, position = position, na.rm = na.rm, show.legend = show.legend,
                                 inherit.aes = FALSE, ...)
     }
@@ -288,6 +322,7 @@ geom_neuron.neuronlist <- function(x = NULL,
 geom_neuron.mesh3d <- function(x = NULL,
                                rotation_matrix = NULL,
                                root = 3,
+                               size = 0.5,
                                cols = c("navy", "turquoise"),
                                stat = "identity",
                                position = "identity",
@@ -313,6 +348,7 @@ geom_neuron.mesh3d <- function(x = NULL,
 geom_neuron.hxsurf <- function(x = NULL,
                                rotation_matrix = NULL,
                                root = 3,
+                               size = 0.5,
                                cols = c("navy", "turquoise"),
                                stat = "identity",
                                position = "identity",
@@ -323,7 +359,7 @@ geom_neuron.hxsurf <- function(x = NULL,
                                ...) {
   x <- rgl::as.mesh3d(x)
   geom_neuron.mesh3d(x=x, rotation_matrix=rotation_matrix, cols=cols,
-                     stat=stat, position=position, na.rm=na.rm, show.legend=show.legend, inherit.aes=inherit.aes,
+                     size=size, stat=stat, position=position, na.rm=na.rm, show.legend=show.legend, inherit.aes=inherit.aes,
                      ...)
 }
 
@@ -333,6 +369,7 @@ geom_neuron.hxsurf <- function(x = NULL,
 geom_neuron.NULL <- function(x = NULL,
                              rotation_matrix = NULL,
                              root = 3,
+                             size = 0.5,
                              cols = c("navy", "turquoise"),
                              stat = "identity",
                              position = "identity",
@@ -352,6 +389,7 @@ geom_neuron.NULL <- function(x = NULL,
 geom_neuron.list <- function(x = NULL,
                              rotation_matrix = NULL,
                              root = 3,
+                             size = 0.5,
                              cols = c("navy", "turquoise"),
                              stat = "identity",
                              position = "identity",
@@ -360,10 +398,22 @@ geom_neuron.list <- function(x = NULL,
                              inherit.aes = FALSE,
                              threshold = Inf,
                              ...) {
-
+  if(is_named_all(cols) & is_named_all(x)){
+    if(all(names(x)%in%names(cols))){
+      cols <- cols[names(x)]
+    }
+  }
   if(length(x)){
-    geom_neuron.neuronlist(x=x, rotation_matrix=rotation_matrix, cols=cols,
-                           stat=stat, position=position, na.rm=na.rm, show.legend=show.legend, inherit.aes=inherit.aes,
+    geom_neuron.neuronlist(x=x,
+                           rotation_matrix=rotation_matrix,
+                           cols=cols,
+                           size=size,
+                           root=root,
+                           stat=stat,
+                           position=position,
+                           na.rm=na.rm,
+                           show.legend=show.legend,
+                           inherit.aes=inherit.aes,
                            ...)
   }else{
     geom_neuron.NULL(x = x, ...)
@@ -376,6 +426,7 @@ geom_neuron.list <- function(x = NULL,
 geom_neuron.matrix <- function(x = NULL,
                                rotation_matrix = NULL,
                                root = 3,
+                               size = 0.5,
                                cols = c("navy", "turquoise"),
                                stat = "identity",
                                position = "identity",
@@ -393,7 +444,8 @@ geom_neuron.matrix <- function(x = NULL,
   list(
     ggplot2::geom_point(data = x,
                         mapping = ggplot2::aes(x = .data$X, y = .data$Y, color = .data$Z),
-                        size = root,  ...),
+                        size = size,
+                        ...),
     ggplot2::scale_color_gradient(low = cols[1], high = cols[length(cols)]),
     ggnewscale::new_scale_colour()
   )
@@ -405,6 +457,7 @@ geom_neuron.matrix <- function(x = NULL,
 geom_neuron.data.frame <- function(x = NULL,
                                    rotation_matrix = NULL,
                                    root = 3,
+                                   size = 0.5,
                                    cols = c("navy", "turquoise"),
                                    stat = "identity",
                                    position = "identity",
@@ -413,11 +466,12 @@ geom_neuron.data.frame <- function(x = NULL,
                                    inherit.aes = FALSE,
                                    threshold = Inf,
                                    ...) {
+  x <- nat::xyzmatrix(x)
   geom_neuron.matrix(x,
                      rotation_matrix = rotation_matrix,
                      root = root,
-                     low = cols[1],
-                     high = cols[length(cols)],
+                     size = size,
+                     cols = cols,
                      stat = stat,
                      position = position,
                      na.rm = FALSE,
@@ -432,6 +486,7 @@ geom_neuron.data.frame <- function(x = NULL,
 geom_neuron.dotprops <- function(x = NULL,
                                  rotation_matrix = NULL,
                                  root = 3,
+                                 size = 0.5,
                                  cols = c("navy", "turquoise"),
                                  stat = "identity",
                                  position = "identity",
@@ -441,11 +496,17 @@ geom_neuron.dotprops <- function(x = NULL,
                                  threshold = Inf,
                                  ...) {
   x<-as.data.frame(nat::xyzmatrix(x))
-  geom_neuron.data.frame(x, rotation_matrix = rotation_matrix, root = root,
-                         low = cols[1], high = cols[length(cols)],
-                         stat = stat, position = position,
-                         na.rm = FALSE, show.legend = NA,
+  geom_neuron.data.frame(x,
+                         rotation_matrix = rotation_matrix,
+                         root = root,
+                         size = size,
+                         cols = cols,
+                         stat = stat,
+                         position = position,
+                         na.rm = FALSE,
+                         show.legend = NA,
                          inherit.aes = FALSE,
+                         threshold = Inf,
                          ...)
 }
 
@@ -455,6 +516,7 @@ geom_neuron.dotprops <- function(x = NULL,
 geom_neuron.synapticneuron <- function(x = NULL,
                                        rotation_matrix = NULL,
                                        root = 3,
+                                       size = 0.5,
                                        cols = c("navy", "turquoise"),
                                        stat = "identity",
                                        position = "identity",
@@ -466,6 +528,7 @@ geom_neuron.synapticneuron <- function(x = NULL,
   geomneuron<-geom_neuron.neuron(x = x,
                                  rotation_matrix = rotation_matrix,
                                  root = root,
+                                 size = size,
                                  cols = cols,
                                  stat = stat,
                                  position = position,
@@ -489,13 +552,13 @@ geom_neuron.synapticneuron <- function(x = NULL,
                           mapping = ggplot2::aes(x = .data$X,
                                                  y = .data$Y),
                           color = "#132157",
-                          size = root/100,
+                          size = root/50,
                           alpha = 0.25),
       ggplot2::geom_point(data = syns.out,
                           mapping = ggplot2::aes(x = .data$X,
                                                  y = .data$Y),
                           color = "#D72000",
-                          size = root/100,
+                          size = root/50,
                           alpha = 0.25)
     )
     c(geomneuron,glist)
@@ -510,6 +573,7 @@ geom_neuron.synapticneuron <- function(x = NULL,
 geom_neuron.splitneuron <- function(x = NULL,
                                     rotation_matrix = NULL,
                                     root = 3,
+                                    size = 0.5,
                                     cols = c("navy", "turquoise"),
                                     stat = "identity",
                                     position = "identity",
@@ -580,6 +644,7 @@ geom_neuron.splitneuron <- function(x = NULL,
     if(length(g.dendrites)){
       ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
                          data = g.dendrites, col = "#54BCD1", na.rm = TRUE,
+                         linewidth = size,
                          stat = stat, position = position,
                          show.legend = show.legend, inherit.aes = inherit.aes, alpha = 1)
     }else{
@@ -588,6 +653,7 @@ geom_neuron.splitneuron <- function(x = NULL,
     if(length(g.axon)){
       ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
                          data = g.axon, col = "#EF7C12", na.rm = TRUE,
+                         linewidth = size,
                          stat = stat, position = position,
                          show.legend = show.legend, inherit.aes = inherit.aes,  alpha = 1)
     }else{
@@ -596,6 +662,7 @@ geom_neuron.splitneuron <- function(x = NULL,
     if(length(g.p.d)){
       ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
                          data = g.p.d, col = "#8FDA04", na.rm = TRUE,
+                         linewidth = size,
                          stat = stat, position = position,
                          show.legend = show.legend, inherit.aes = inherit.aes,  alpha = 1)
     }else{
@@ -604,21 +671,24 @@ geom_neuron.splitneuron <- function(x = NULL,
     if(length(g.p.n)){
       ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
                          data = g.p.n, col = "#C70E7B", na.rm = TRUE,
+                         linewidth = size,
                          stat = stat, position = position,
                          show.legend = show.legend, inherit.aes = inherit.aes,  alpha = 1)
     }else{
       NULL
     },
-    if(length(g.nulls)){
-      ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
-                         data = g.nulls, col = "#B3B3B3", na.rm = TRUE,
-                         stat = stat, position = position,
-                         show.legend = show.legend, inherit.aes = inherit.aes,  alpha = 1)
-    }else{
-      NULL
-    },
+    # if(length(g.nulls)){
+    #   ggplot2::geom_path(mapping = ggplot2::aes(x = .data$X, y = .data$Y, group = .data$group),
+    #                      data = g.nulls, col = "#B3B3B3", na.rm = TRUE,
+    #                      linewidth = size,
+    #                      stat = stat, position = position,
+    #                      show.legend = show.legend, inherit.aes = inherit.aes,  alpha = 1)
+    # }
+    # else{
+    #   NULL
+    # },
     ggplot2::geom_point(mapping = ggplot2::aes(x = .data$X, y = .data$Y),
-                        data = soma, col = "black",
+                        data = soma,
                         color = cols[1], alpha = 0.75, size = root)
   )
 
@@ -682,25 +752,25 @@ geom_neuron.splitneuron <- function(x = NULL,
 #' @examples
 #' \dontrun{
 #' library(nat.ggplot)
-#' 
+#'
 #' # Visualise neurons with brain volume as context
-#' ggneuron(banc.skels, 
-#'          volume = banc.brain_neuropil_lowres,
+#' ggneuron(banc.skels,
+#'          volume = banc.brain_neuropil,
 #'          rotation_matrix = banc_view)
-#' 
+#'
 #' # Visualise the brain neuropil alone
-#' ggneuron(banc.brain_neuropil_lowres,
+#' ggneuron(banc.brain_neuropil,
 #'          rotation_matrix = banc_view,
 #'          cols1 = c("lightblue", "darkblue"))
-#' 
+#'
 #' # Visualise split neurons with custom colours
-#' ggneuron(bc.neurons.flow, 
-#'          volume = banc.brain_neuropil_lowres,
+#' ggneuron(bc.neurons.flow,
+#'          volume = banc.brain_neuropil,
 #'          rotation_matrix = banc_view,
 #'          info = "LHPD2a1 neurons with axon/dendrite split")
-#' 
+#'
 #' # Visualise neuron meshes
-#' ggneuron(banc.meshes_lowres[[1]], 
+#' ggneuron(banc.meshes[[1]],
 #'          rotation_matrix = banc_view,
 #'          cols1 = c("purple", "magenta"),
 #'          alpha = 0.8)
@@ -711,7 +781,7 @@ geom_neuron.splitneuron <- function(x = NULL,
 #' Maurer, C. R., & Luo, L. (2007). Comprehensive maps of Drosophila higher
 #' olfactory centers: Spatially segregated fruit and pheromone representation.
 #' \emph{Cell}, 128(6), 1187-1203. \doi{10.1016/j.cell.2007.01.040}
-#' 
+#'
 #' Schneider-Mizell, C. M., Gerhard, S., Longair, M., Kazimiers, T., Li, F.,
 #' Zwart, M. F., Champion, A., Midgley, F. M., Fetter, R. D., Saalfeld, S.,
 #' & Cardona, A. (2016). Quantitative neuroanatomy for connectomics in Drosophila.
@@ -739,6 +809,8 @@ ggneuron <- function(x,
     ggplot2::labs(title = info)
 }
 
+#' @method prune_vertices synapticneuron
+#' @export
 prune_vertices.synapticneuron <- function (x, verticestoprune, invert = FALSE, ...){
   if(length(verticestoprune)==nrow(x$d)){
     warning('no points left after pruning')

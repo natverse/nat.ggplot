@@ -1,0 +1,242 @@
+---
+title: "plot examples from the BANC connectome"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{plot examples from the BANC connectome}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<!-- from README section: nat.ggplot / Installation -->
+```{r}
+# install.packages("remotes")
+remotes::install_github('natverse/nat.ggplot')
+```
+
+```{r setup}
+library(nat.ggplot)
+output_dir <- "inst/images/"
+if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Setting a view for neuron data -->
+```{r}
+# Define the different view matrices from bancr
+views <- list(
+  side = structure(c(0.000764884985983372, 0.0153511334210634, 
+    -0.99988180398941, 0, -0.940421104431152, -0.339961022138596, 
+    -0.00593886896967888, 0, -0.340011894702911, 0.94031423330307, 
+    0.0141764245927334, 0, -401395.405539944, -128785.809090088, 
+    -5607.3408203126, 1), dim = c(4L, 4L)),
+    front = structure(c(0.99931389093399, 0.0139970388263464, 
+      -0.0342894680798054, 0, -0.0321401171386242, -0.132316529750824, 
+      -0.990686297416687, 0, -0.0184037387371063, 0.991108655929565, 
+      -0.131775915622711, 0, 0, 0, 0, 1), dim = c(4L, 4L)),
+      dorsal = structure(c(0.840221107006073, 0.537661552429199, 
+  -0.0703445374965668, 0, -0.541468024253845, 0.838866174221039, 
+  -0.0558210015296936, 0, 0.0289968233555555, 0.0849913582205772, 
+  0.9959596991539, 0, 0, 0, 0, 1), dim = c(4L, 4L)),
+  ventral = structure(c(0.945645987987518, -0.325197845697403, 
+  3.18996608257294e-05, 0, -0.30071958899498, -0.874427616596222, 
+  0.380715191364288, 0, -0.123779848217964, -0.360031485557556, 
+  -0.924692392349243, 0, 0, 0, 0, 1), dim = c(4L, 4L))
+)
+
+# Create plots for each view
+plots <- list()
+for(view_name in names(views)) {
+  plots[[view_name]] <- ggneuron(
+    banc.meshes,
+    volume = banc.brain_neuropil,
+    rotation_matrix = views[[view_name]],
+    cols1 = c("#8B1A89", "#FF69B4"),
+    cols2 = c("grey95", "grey85"),
+    alpha = 0.8,
+    info = paste(substring(view_name, 1, 1), 
+                 substring(view_name, 2), " view", sep="")
+  )
+}
+
+# Display and save individual views
+plots$side
+ggsave(file.path(output_dir, "view_side.png"), plots$side, width = 5, height = 5, dpi = 150, bg = "white")
+
+plots$front
+ggsave(file.path(output_dir, "view_front.png"), plots$front, width = 5, height = 5, dpi = 150, bg = "white")
+
+# Create a collage using cowplot
+if (requireNamespace("cowplot", quietly = TRUE)) {
+  library(cowplot)
+  # Combine plots in a 2x2 grid
+  collage <- plot_grid(
+    plots$front + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    plots$side + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    plots$dorsal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    plots$ventral + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    ncol = 2,
+    labels = c("A", "B", "C", "D"),
+    label_size = 12
+  ) +
+  ggplot2::theme(legend.position = "none")
+  collage
+  ggsave(file.path(output_dir, "views_collage.png"), collage, width = 10, height = 10, dpi = 150, bg = "white")
+}
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Visualising Brain Neuropil -->
+```{r}
+# Brain neuropil with custom colours
+p <- ggneuron(banc.brain_neuropil,
+              rotation_matrix = banc_view,
+              cols1 = c("grey", "#EFC7E6"), 
+              alpha = 0.5)
+p
+ggsave(file.path(output_dir, "brain_neuropil.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Plotting Neurons with Custom Colours -->
+```{r}
+# All neurons in one colour
+p <- g.anat +
+  geom_neuron(banc.skels_smoothed,
+              rotation_matrix = banc_view,
+              cols = c("purple"))
+p
+ggsave(file.path(output_dir, "neurons_single_colour.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Plotting Neurons with Custom Colours -->
+```{r}
+# Colour gradient in the Z dimension:
+p <- g.anat +
+  geom_neuron(banc.meshes[1],
+              rotation_matrix = banc_view,
+              cols = c("purple", "orange"))
+p
+ggsave(file.path(output_dir, "neurons_gradient.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Plotting Neurons with Custom Colours -->
+```{r}
+# Each neuron in a different colour
+neuron_colours <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8")
+p <- g.anat +
+  geom_neuron(banc.brain_neuropil,
+              rotation_matrix = banc_view,
+              cols = c("grey95", "grey80"),
+              alpha = 0.2) +
+  geom_neuron(banc.skels_smoothed,
+              rotation_matrix = banc_view,
+              cols = neuron_colours)
+p
+ggsave(file.path(output_dir, "neurons_multi_colour.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Visualising Synapses -->
+```{r}
+# Create synapse visualisation
+p <- g.anat +
+  # Neuron meshes
+  geom_neuron(banc.meshes,
+              rotation_matrix = banc_view,
+              cols = c("grey60", "grey40"),
+              alpha = 0.8) +
+  # Synapses as points
+  geom_neuron(banc.syns %>% # Just output synapses
+                       dplyr::filter(prepost==0),
+             rotation_matrix = banc_view,
+             root = 0.5,  # Point size for synapses
+             cols = c("#EE4244", "#8B0000"),
+             alpha = 0.6) +
+  geom_neuron(banc.syns %>% # Just input synapses
+                       dplyr::filter(prepost==1),
+             rotation_matrix = banc_view,
+             root = 0.5,  # Point size for synapses
+             cols = c("#1BB6AF", "#121B56"),
+             alpha = 0.6)
+p
+ggsave(file.path(output_dir, "synapses_visualisation.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Axon-Dendrite Split Visualisation -->
+```{r}
+# Single neuron with axon/dendrite split
+p <- ggneuron(bc.neurons.flow[[1]], 
+              threshold = 10000, # Max distance over which a line is drawn between matchign arbour
+              rotation_matrix = banc_view,
+              info = paste("neuron: ", names(bc.neurons.flow)[1]))
+p
+ggsave(file.path(output_dir, "split_single_neuron.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Axon-Dendrite Split Visualisation -->
+```{r}
+# All split neurons with brain context
+p <- ggneuron(bc.neurons.flow,
+              volume = banc.brain_neuropil,
+              threshold = 10000,
+              rotation_matrix = banc_view,
+              info = "LHPD2a1 neurons:\n axon (orange), dendrite (cyan), primary neurite (purple), linker (green)\n inputs (navy), outputs (red)")
+p
+ggsave(file.path(output_dir, "split_all_neurons.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+```
+
+<!-- from README section: nat.ggplot / Example Gallery / Creating Figures -->
+```{r}
+library(ggplot2)
+
+# Create comprehensive visualisation with zoom
+# Calculate bounding box of meshes after rotation
+mesh_bounds <- do.call(rbind, lapply(banc.meshes, function(mesh) {
+  vertices <- t(mesh$vb[-4,])
+  if(!is.null(banc_view)) {
+    vertices <- t(banc_view[1:3, 1:3] %*% t(vertices))
+  }
+  data.frame(X = vertices[,1], Y = vertices[,2])
+}))
+
+# Add some padding (10% on each side)
+x_range <- range(mesh_bounds$X)
+y_range <- range(mesh_bounds$Y)
+x_padding <- diff(x_range) * 0.1
+y_padding <- diff(y_range) * 0.1
+
+p <- g.anat +
+  # Add brain outline
+  geom_neuron(banc.brain_neuropil,
+              rotation_matrix = banc_view,
+              cols = c("grey95", "grey85"),
+              alpha = 0.3) +
+  # Add neuron meshes
+  geom_neuron(banc.meshes,
+              rotation_matrix = banc_view,
+              cols = c("grey60", "grey40"),
+              alpha = 0.8) +
+  # Add split neurons
+  geom_neuron(bc.neurons.flow,
+              threshold = 10000,
+              rotation_matrix = banc_view) +
+  # Zoom to neuron mesh bounds
+  coord_fixed(xlim = c(x_range[1] - x_padding, x_range[2] + x_padding),
+              ylim = c(y_range[1] - y_padding, y_range[2] + y_padding)) +
+  # Add title
+  theme(plot.background = element_rect(fill = "white", color = NA),
+        plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 10),
+        plot.margin = margin(10, 10, 10, 10)) +
+  labs(title = "LHPD2a1",
+       subtitle = "lateral horn output neurons from BANC connectome")
+p
+
+# Save figure
+# ggsave("lhpd2a1_neurons.pdf", p, width = 6, height = 6, dpi = 300)
+ggsave(file.path(output_dir, "figure_comprehensive.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+```
+

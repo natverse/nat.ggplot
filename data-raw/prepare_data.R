@@ -71,20 +71,19 @@ bc.neurons.flow <- hemibrainr::flow_centrality(banc.neurons.syns,
                                                OmitFailures = FALSE)
 bc.neurons.flow[,] <- meta
 
-# Make a lower res BANC brain mesh
-banc.brain_neuropil_lowres <- as.mesh3d(bancr::banc_brain_neuropil.surf)
-banc.brain_neuropil_lowres <- Rvcg::vcgQEdecim(banc.brain_neuropil_lowres, percent = .5)
-
-# Simplify banc_brain_neuropil_lowres and banc.meshes by ~50% face number
-banc.meshes_lowres <- nat::nlapply(banc.meshes,  Rvcg::vcgQEdecim, percent = .2)
+# # Make a lower res BANC brain mesh
+banc.brain_neuropil <- as.mesh3d(bancr::banc_brain_neuropil.surf)
+# banc.brain_neuropil <- Rvcg::vcgQEdecim(banc.brain_neuropil, percent = .5)
+# # Simplify banc_brain_neuropil and banc.meshes by ~50% face number
+# banc.meshes <- nat::nlapply(banc.meshes,  Rvcg::vcgQEdecim, percent = .2)
 
 # # Get BANC nuclei!
 # banc.nuclei <- banc_read_nuclei_mesh(meta$nucleus_id)
-# banc.nuclei_lowres <- nat::nlapply(banc.nuclei,  Rvcg::vcgQEdecim, percent = .2)
+# banc.nuclei <- nat::nlapply(banc.nuclei,  Rvcg::vcgQEdecim, percent = .2)
 
 # Save meshes: banc.meshes
 usethis::use_data(
-  banc.meshes_lowres,
+  banc.meshes,
   overwrite = TRUE,
   compress = "xz"
 )
@@ -112,7 +111,7 @@ usethis::use_data(
 
 # Save brain mesh:
 usethis::use_data(
-  banc.brain_neuropil_lowres,
+  banc.brain_neuropil,
   overwrite = TRUE,
   compress = "xz"
 )

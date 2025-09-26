@@ -19,6 +19,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -33,6 +34,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -47,6 +49,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -61,6 +64,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -75,6 +79,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -89,6 +94,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -103,6 +109,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -117,6 +124,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -131,6 +139,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -145,6 +154,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -159,6 +169,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -173,6 +184,7 @@ geom_neuron(
   x = NULL,
   rotation_matrix = NULL,
   root = 3,
+  size = 0.5,
   cols = c("navy", "turquoise"),
   stat = "identity",
   position = "identity",
@@ -190,6 +202,8 @@ geom_neuron(
 
 \item{root}{Numeric, if >0 and x is or contains \code{neuron} objects,
 then the root node is plotted as a dot of size \code{root}. If \code{FALSE} or \code{0} no root node is plotted.}
+
+\item{size}{Numeric, the line width for neuron skeleton paths. Default is 0.5.}
 
 \item{cols}{The colour to plot the neurons in. If \code{length(cols)==length(x)} each neuron will be coloured
 by its index in \code{x} applied to \code{cols}.}
@@ -222,29 +236,29 @@ it colours axonal and dendritic compartments differently.
 library(nat.ggplot)
 
 # Plot a single neuron
-g.anat + 
+g.anat +
   geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
 
 # Plot all neurons with custom colours
-g.anat + 
-  geom_neuron(banc.skels, 
+g.anat +
+  geom_neuron(banc.skels,
               rotation_matrix = banc_view,
               cols = c("purple", "magenta"))
 
 # Plot brain mesh as context
-g.anat + 
-  geom_neuron(banc.brain_neuropil_lowres, 
+g.anat +
+  geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
               cols = c("grey75", "grey50"),
               alpha = 0.3)
 
 # Plot split neurons showing axon/dendrite
-g.anat + 
-  geom_neuron(bc.neurons.flow[[1]], 
+g.anat +
+  geom_neuron(bc.neurons.flow[[1]],
               rotation_matrix = banc_view)
 
 # Plot synapses as points
-g.anat + 
+g.anat +
   geom_neuron(as.matrix(banc.syns[, c("X", "Y", "Z")]),
               rotation_matrix = banc_view,
               root = 0.5,

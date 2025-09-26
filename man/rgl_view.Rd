@@ -38,7 +38,7 @@ library(nat.ggplot)
 library(ggplot2)
 
 # First, plot neurons in 3D and rotate to desired view
-plot3d(banc.brain_neuropil_lowres, alpha = 0.3)
+plot3d(banc.brain_neuropil, alpha = 0.3)
 plot3d(banc.skels)
 
 # Capture the view after rotating with mouse
@@ -46,7 +46,7 @@ my_view <- rgl_view()
 
 # Use the captured view in ggplot2
 ggplot() +
-  geom_neuron(banc.brain_neuropil_lowres,
+  geom_neuron(banc.brain_neuropil,
               rotation_matrix = my_view$userMatrix,
               cols = c("grey75", "grey50"),
               alpha = 0.3) +

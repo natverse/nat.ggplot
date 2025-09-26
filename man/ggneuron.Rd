@@ -54,23 +54,23 @@ elements to focus on the neuron visualisation itself.
 library(nat.ggplot)
 
 # Visualise neurons with brain volume as context
-ggneuron(banc.skels, 
-         volume = banc.brain_neuropil_lowres,
+ggneuron(banc.skels,
+         volume = banc.brain_neuropil,
          rotation_matrix = banc_view)
 
 # Visualise the brain neuropil alone
-ggneuron(banc.brain_neuropil_lowres,
+ggneuron(banc.brain_neuropil,
          rotation_matrix = banc_view,
          cols1 = c("lightblue", "darkblue"))
 
 # Visualise split neurons with custom colours
-ggneuron(bc.neurons.flow, 
-         volume = banc.brain_neuropil_lowres,
+ggneuron(bc.neurons.flow,
+         volume = banc.brain_neuropil,
          rotation_matrix = banc_view,
          info = "LHPD2a1 neurons with axon/dendrite split")
 
 # Visualise neuron meshes
-ggneuron(banc.meshes_lowres[[1]], 
+ggneuron(banc.meshes[[1]],
          rotation_matrix = banc_view,
          cols1 = c("purple", "magenta"),
          alpha = 0.8)

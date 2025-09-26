@@ -159,18 +159,18 @@
 #' 
 #' # Plot brain neuropil with default view
 #' ggplot() + 
-#'   geom_neuron(banc.brain_neuropil_lowres, 
+#'   geom_neuron(banc.brain_neuropil, 
 #'               cols = c("grey75", "grey50"), 
 #'               alpha = 0.3)
 #' 
 #' # Plot with frontal view
 #' ggplot() + 
-#'   geom_neuron(banc.brain_neuropil_lowres, 
+#'   geom_neuron(banc.brain_neuropil, 
 #'               rotation_matrix = banc_view,
 #'               cols = c("grey75", "grey50"), 
 #'               alpha = 0.3)
 #' }
-"banc.brain_neuropil_lowres"
+"banc.brain_neuropil"
 
 #' Low Resolution LHPD2a1 Neuron Meshes from BANC
 #'
@@ -207,16 +207,16 @@
 #' 
 #' # Plot first neuron mesh
 #' ggplot() + 
-#'   geom_neuron(banc.meshes_lowres[[1]], 
+#'   geom_neuron(banc.meshes[[1]], 
 #'               rotation_matrix = banc_view,
 #'               cols = c("purple", "magenta"))
 #' 
 #' # Plot all neuron meshes
-#' ggneuron(banc.meshes_lowres, 
+#' ggneuron(banc.meshes, 
 #'          rotation_matrix = banc_view,
 #'          cols = c("purple", "magenta"))
 #' }
-"banc.meshes_lowres"
+"banc.meshes"
 
 #' BANC Frontal View Rotation Matrix
 #'
@@ -245,11 +245,11 @@
 #'   geom_neuron(banc.skels, rotation_matrix = banc_view)
 #' 
 #' # Create a custom view interactively
-#' plot3d(banc.brain_neuropil_lowres)
+#' plot3d(banc.brain_neuropil)
 #' # Rotate to desired angle with mouse
 #' my_view <- rgl_view()$userMatrix
 #' # Use custom view
 #' ggplot() + 
-#'   geom_neuron(banc.brain_neuropil_lowres, rotation_matrix = my_view)
+#'   geom_neuron(banc.brain_neuropil, rotation_matrix = my_view)
 #' }
 "banc_view"

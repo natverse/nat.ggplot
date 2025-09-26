@@ -46,19 +46,22 @@ neuron_data <- ggplot2_neuron_path(banc.skels[[1]])
 head(neuron_data)
 
 # Plot with g.anat base
-g.anat + 
-  geom_path(data = neuron_data, 
+g.anat +
+  geom_path(data = neuron_data,
             aes(x = X, y = Y, group = group))
 
 # Apply rotation matrix
-neuron_rotated <- ggplot2_neuron_path(banc.skels[[1]], 
+neuron_rotated <- ggplot2_neuron_path(banc.skels[[1]],
                                        rotation_matrix = banc_view)
 
 # Convert neuronlist
 neuronlist_data <- ggplot2_neuron_path(banc.skels)
 
 # Convert mesh3d object
-mesh_data <- ggplot2_neuron_path(banc.brain_neuropil_lowres)
+mesh_data <- ggplot2_neuron_path(banc.brain_neuropil)
 }
 
+}
+\seealso{
+\code{\link{rgl_view}} for a way to obtain \code{rotation_matrix}
 }

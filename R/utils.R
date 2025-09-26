@@ -65,7 +65,7 @@ check_package_available <- function(pkg, reason = NULL) {
 #' library(ggplot2)
 #'
 #' # First, plot neurons in 3D and rotate to desired view
-#' plot3d(banc.brain_neuropil_lowres, alpha = 0.3)
+#' plot3d(banc.brain_neuropil, alpha = 0.3)
 #' plot3d(banc.skels)
 #'
 #' # Capture the view after rotating with mouse
@@ -73,7 +73,7 @@ check_package_available <- function(pkg, reason = NULL) {
 #'
 #' # Use the captured view in ggplot2
 #' ggplot() +
-#'   geom_neuron(banc.brain_neuropil_lowres,
+#'   geom_neuron(banc.brain_neuropil,
 #'               rotation_matrix = my_view$userMatrix,
 #'               cols = c("grey75", "grey50"),
 #'               alpha = 0.3) +
@@ -84,18 +84,23 @@ check_package_available <- function(pkg, reason = NULL) {
 #' @seealso \code{\link{geom_neuron}}, \code{\link{ggneuron}}
 #'
 #' @export
-rgl_view <- function ()
-{
-  dput(list(userMatrix = par3d()$userMatrix, zoom = par3d()$zoom,
-            windowRect = par3d()$windowRect))
+rgl_view <- function () {
+  if (!requireNamespace("rgl", quietly = TRUE))
+    stop("Please install rgl to use rgl_view()", call. = FALSE)
+  dput(list(
+    userMatrix = rgl::par3d()$userMatrix,
+    zoom       = rgl::par3d()$zoom,
+    windowRect = rgl::par3d()$windowRect
+  ))
 }
 
-#' Base ggplot2 Theme for Neuroanatomy Plots
+
+#' Base ggplot2 Template for Neuroanatomy Plots
 #'
 #' @description
-#' A pre-configured ggplot2 object with a minimal theme optimised for 
-#' neuroanatomy visualisations. This object provides a clean base with no axes, 
-#' grids, or extraneous elements, allowing the focus to remain on the 
+#' A pre-configured ggplot2 template with a minimal theme optimised for
+#' neuroanatomy visualisations. This object provides a clean base with no axes,
+#' grids, or extraneous elements, allowing the focus to remain on the
 #' neuroanatomical structures.
 #'
 #' @format A ggplot2 object with:
@@ -116,14 +121,14 @@ rgl_view <- function ()
 #' @examples
 #' \dontrun{
 #' library(nat.ggplot)
-#' 
+#'
 #' # Use g.anat as the base for plotting neurons
-#' g.anat + 
+#' g.anat +
 #'   geom_neuron(banc.skels, rotation_matrix = banc_view)
-#' 
+#'
 #' # Add multiple layers
 #' g.anat +
-#'   geom_neuron(banc.brain_neuropil_lowres, 
+#'   geom_neuron(banc.brain_neuropil,
 #'               rotation_matrix = banc_view,
 #'               cols = c("grey95", "grey85"),
 #'               alpha = 0.3) +
@@ -133,7 +138,7 @@ rgl_view <- function ()
 #' }
 #'
 #' @seealso \code{\link{geom_neuron}}, \code{\link{ggneuron}}
-#' 
+#'
 #' @export
 g.anat <- ggplot2::ggplot() +
   ggplot2::coord_fixed() +
@@ -158,3 +163,16 @@ g.anat <- ggplot2::ggplot() +
                  panel.background = ggplot2::element_blank(),
                  plot.background = ggplot2::element_blank()) +
   ggplot2::labs(title = '')
+
+# hidden
+is_named_all <- function(x, require_unique = FALSE) {
+  nm <- names(x)
+  ok <- !is.null(nm) &&
+    length(nm) == length(x) &&
+    all(!is.na(nm)) &&
+    all(nzchar(nm))
+  if (require_unique) {
+    ok <- ok && length(unique(nm)) == length(nm)
+  }
+  ok
+}

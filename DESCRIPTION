@@ -1,6 +1,6 @@
 Type: Package
 Package: nat.ggplot
-Title: Functions for creating neuroanatomy plots with ggplot2 + nat
+Title: Functions for creating neuroanatomy plots with ggplot2 and nat
 Version: 0.1.0
 Date: 2024-07-11
 Authors@R: 
@@ -11,31 +11,28 @@ Authors@R:
            comment = c(ORCID = "0000-0002-1195-0445")))
 Description: Functions for creating neuroanatomy plots in the ggplot2 style.
 License: GPL-3 + file LICENSE
-URL: https://github.com/natverse/bancr, https://natverse.github.io/nat.ggplot/
+URL: https://github.com/natverse/nat.ggplot, https://natverse.github.io/nat.ggplot/
 BugReports: https://github.com/natverse/nat.ggplot/issues
 Depends: 
-    R (>= 3.5.0),
-    ggplot2 (>= 3.5)
+    R (>= 3.5.0,
 Imports: 
     nat,
+    ggplot2 (>= 3.5),
     dplyr,
     rlang,
-    ggnewscale,
-    rgl
+    ggnewscale
 Suggests: 
     testthat (>= 3.0.0),
+    rgl,
     readobj,
     Rvcg,
     Morpho,
     rmarkdown,
     spelling,
-    catmaid,
-    rgl,
-    hemibrainr
-Remotes: 
-    natverse/nat,
-    tidyverse/ggplot2,
-    eliocamp/ggnewscale
+    knitr,
+    catmaid
+Remotes:
+   catmaid=natverse/rcatmaid
 Config/testthat/edition: 3
 LazyDataCompression: xz
 Encoding: UTF-8
@@ -43,3 +40,4 @@ Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr
