@@ -33,7 +33,7 @@ reference:
   - title: Data
     contents:
       - banc.neurons.flow
-      - banc.neurons.skels
+      - banc.skels
       - banc.meshes
 
 articles:

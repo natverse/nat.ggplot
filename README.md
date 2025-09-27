@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-![Comprehensive figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure_comprehensive.png?raw=true)
+[Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
 
 # nat.ggplot
 
@@ -22,7 +22,9 @@ In the [natverse ecosystem](https://natverse.org/), neurons are represented as t
 - **mesh3d**: 3D surface meshes representing brain regions or neuron surfaces
 - **Synaptic information**: Pre- and postsynaptic site locations that can be overlaid on morphology
 
-For more details, see the [natverse neurons introduction](https://natverse.org/nat/articles/neurons-intro.html).
+For more details, see the [natverse neurons introduction](https://natverse.org/nat/articles/neurons-intro.html)
+
+[figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure.png?raw=true)
 
 ## Installation
 
@@ -68,8 +70,8 @@ p <- g.anat +
               alpha = 0.3) +
   geom_neuron(banc.skels_smoothed,
               size = 0.01,
-              alpa = 0.1,
-              root = 2,
+              alpa = 0.5,
+              root = 1,
               rotation_matrix = banc_view,
               cols = "black")
 p
@@ -178,8 +180,8 @@ You can visualise the brain neuropil mesh with different colours and transparenc
 # Brain neuropil with custom colours
 p <- ggneuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
-              cols1 = c("grey", "#EFC7E6"), 
-              alpha = 0.5)
+              cols1 = c("orange", "#EFC7E6"), 
+              alpha = 0.1)
 p
 ggsave(file.path(output_dir, "brain_neuropil.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
@@ -327,7 +329,7 @@ p <- g.anat +
               alpha = 0.8) +
   # Add split neurons
   geom_neuron(banc.neurons.flow,
-              threshold = 30000,
+              threshold = 15000,
               root = 2,
               size = 0.1,
               rotation_matrix = banc_view) +
