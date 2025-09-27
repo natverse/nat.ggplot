@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-[Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
+![Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
 
 # nat.ggplot
 
@@ -24,7 +24,7 @@ In the [natverse ecosystem](https://natverse.org/), neurons are represented as t
 
 For more details, see the [natverse neurons introduction](https://natverse.org/nat/articles/neurons-intro.html)
 
-[figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure.png?raw=true)
+![figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure.png?raw=true)
 
 ## Installation
 
