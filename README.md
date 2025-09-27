@@ -2,7 +2,7 @@
 [![natverse](https://img.shields.io/badge/natverse-Part%20of%20the%20natverse-a241b6)](https://natverse.github.io)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)](https://natverse.github.io/nat.ggplot/reference/)
-[![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
+![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)
 <!-- badges: end -->
 
 ![Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
@@ -39,6 +39,8 @@ remotes::install_github('natverse/nat.ggplot')
 
 ``` r
 library(nat.ggplot)
+library(ggplot2)
+library(dplyr)
 
 # Set output directory for saving figures (change as needed)
 output_dir <- "inst/images/"
