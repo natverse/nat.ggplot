@@ -1,7 +1,7 @@
 <!-- badges: start -->
-[![natverse](https://img.shields.io/badge/natverse-Part%20of%20the%20natverse-a241b6)](https://natverse.github.io)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)](https://natverse.github.io/nat.ggplot/reference/)
+[![natverse](https://img.shields.io/badge/natverse-Part%20of%20the%20natverse-a241b6)]( https://natverse.org/)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)]( https://natverse.org//nat.ggplot/reference/)
 ![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
@@ -481,13 +481,13 @@ if (requireNamespace("cowplot", quietly = TRUE)) {
 
 ## Acknowledgements
 
-This package was developed by Alexander Shakeel Bates while in the laboratory of Rachel I. Wilson at Harvard Medical School. The package leverages the [natverse](https://natverse.github.io) ecosystem for neuroanatomy in R.
+This package was developed by Alexander Shakeel Bates while in the laboratory of Rachel I. Wilson at Harvard Medical School. The package leverages the [natverse]( https://natverse.org/) ecosystem for neuroanatomy in R.
 
 ## References
 
 Key papers referenced in this package:
 
-- Bates, A. S., Phelps, J. S., Kim, M., Yang, H. H., Matsliah, A., Ajabi, Z., Perlman, E., et al. (2025). Distributed control circuits across a brain-and-cord connectome. *bioRxiv*. doi: [10.1101/2025.07.31.667571](https://doi.org/10.1101/2025.07.31.667571)
+- Bates, A. S., Phelps, J. S., Kim, M., Yang, H. H., Matsliah, A., Ajabi, Z., Perlman, E., et al. (2025). Distributed control circuits across a brain-and-cord connectome. *bioRxiv*. doi: [10.1101/2025.07.31.667571](https://doi.org/10.1101/2025.07.31.667571v2)
 
 - Bates, Alexander Shakeel, James D. Manton, Sridhar R. Jagannathan, Marta Costa, Philipp Schlegel, Torsten Rohlfing, and Gregory Sxe Jefferis. 2020. “The Natverse, a Versatile Toolbox for Combining and Analysing Neuroanatomical Data.” eLife 9 (April). [eLife.53350](https://doi.org/10.7554/eLife.53350)
 
@@ -500,5 +500,5 @@ Key papers referenced in this package:
 ## Getting Help
 
 - For issues and feature requests, please use the [GitHub issue tracker](https://github.com/natverse/nat.ggplot/issues)
-- For general natverse questions, visit the [natverse documentation](https://natverse.github.io)
-- For BANC connectome data, see the [bancr package](https://github.com/natverse/bancr)
+- For general natverse questions, visit the [natverse documentation]( https://natverse.org/)
+- For BANC connectome data, see the [bancr package](https://github.com/flyconnectome/bancr)

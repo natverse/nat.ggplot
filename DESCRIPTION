@@ -1,43 +1,36 @@
-Type: Package
 Package: nat.ggplot
-Title: Functions for creating neuroanatomy plots with ggplot2 and nat
+Type: Package
+Title: Functions for Creating Neuroanatomy Plots with ggplot2 and nat
 Version: 0.1.0
-Date: 2024-07-11
-Authors@R: 
+Authors@R:
     c(person(given = "Alexander",
-           family = "Bates",
-           role = c("aut", "cre"),
-           email = "alexander.shakeel.bates@gmail.com",
-           comment = c(ORCID = "0000-0002-1195-0445")))
-Description: Functions for creating neuroanatomy plots in the ggplot2 style.
+             family = "Bates",
+             role = c("aut", "cre"),
+             email = "alexander.shakeel.bates@gmail.com",
+             comment = c(ORCID = "0000-0002-1195-0445")))
+Description: Functions for creating neuroanatomy plots in the ggplot2 style for natverse neuron and mesh objects.
 License: GPL-3 + file LICENSE
-URL: https://github.com/natverse/nat.ggplot, https://natverse.github.io/nat.ggplot/, http://natverse.org/nat.ggplot/
+URL: https://natverse.org/nat.ggplot/, https://github.com/natverse/nat.ggplot
 BugReports: https://github.com/natverse/nat.ggplot/issues
-Depends: 
-    R (>= 3.5.0)
-Imports: 
+Depends:
+    R (>= 4.1)
+Imports:
     nat,
-    ggplot2 (>= 3.5),
+    ggplot2 (>= 3.5.0),
     dplyr,
     rlang,
     ggnewscale
-Suggests: 
-    testthat (>= 3.0.0),
+Suggests:
     rgl,
-    readobj,
-    Rvcg,
-    Morpho,
-    rmarkdown,
-    spelling,
+    testthat (>= 3.0.0),
     knitr,
-    catmaid
-Remotes:
-   catmaid=natverse/rcatmaid
+    rmarkdown,
+    spelling
+VignetteBuilder: knitr
 Config/testthat/edition: 3
-LazyDataCompression: xz
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
+LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-VignetteBuilder: knitr
