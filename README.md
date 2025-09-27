@@ -3,6 +3,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)](https://natverse.github.io/nat.ggplot/reference/)
 ![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)
+[![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ![Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
