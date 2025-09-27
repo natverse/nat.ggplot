@@ -8,3 +8,11 @@
 ^pkgdown$
 ^\.github$
 ^^codecov\\.yml$$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^renv$
+^renv\.lock$
+^codecov\.yml$
+
