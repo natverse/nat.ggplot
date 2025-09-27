@@ -26,15 +26,19 @@ reference:
     contents:
       - ggneuron
       - starts_with("geom_")
+      - g.anat
   - title: Utilities
     contents:
       - rgl_view
       - matches("^ggplot2_")
   - title: Data
     contents:
+      - banc.brain_neuropil
       - banc.neurons.flow
       - banc.skels
-      - banc.meshes
+      - banc.meshes 
+      - banc.syns
+      - banc_view
 
 articles:
   - title: Getting started
