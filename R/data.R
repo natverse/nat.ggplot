@@ -31,10 +31,10 @@
 #' \dontrun{
 #' library(nat)
 #' library(nat.ggplot)
-#' 
+#'
 #' # Plot the neurons
 #' plot3d(banc.skels)
-#' 
+#'
 #' # Use with ggplot2
 #' library(ggplot2)
 #' ggplot() + geom_neuron(banc.skels, rotation_matrix = banc_view)
@@ -76,7 +76,7 @@
 #' \dontrun{
 #' library(ggplot2)
 #' library(nat.ggplot)
-#' 
+#'
 #' # Plot synapses coloured by type
 #' ggplot(banc.syns, aes(x = X, y = Y)) +
 #'   geom_point(aes(colour = factor(prepost)), alpha = 0.5) +
@@ -124,14 +124,14 @@
 #' \dontrun{
 #' library(nat.ggplot)
 #' library(ggplot2)
-#' 
+#'
 #' # Plot split neurons showing axon/dendrite compartments
-#' ggplot() + geom_neuron(bc.neurons.flow[[1]], rotation_matrix = banc_view)
-#' 
+#' ggplot() + geom_neuron(banc.neurons.flow[[1]], rotation_matrix = banc_view)
+#'
 #' # Plot all split neurons
-#' ggneuron(bc.neurons.flow, rotation_matrix = banc_view)
+#' ggneuron(banc.neurons.flow, rotation_matrix = banc_view)
 #' }
-"bc.neurons.flow"
+"banc.neurons.flow"
 
 #' Low Resolution BANC Brain Neuropil Mesh
 #'
@@ -156,18 +156,18 @@
 #' \dontrun{
 #' library(nat.ggplot)
 #' library(ggplot2)
-#' 
+#'
 #' # Plot brain neuropil with default view
-#' ggplot() + 
-#'   geom_neuron(banc.brain_neuropil, 
-#'               cols = c("grey75", "grey50"), 
+#' ggplot() +
+#'   geom_neuron(banc.brain_neuropil,
+#'               cols = c("grey75", "grey50"),
 #'               alpha = 0.3)
-#' 
+#'
 #' # Plot with frontal view
-#' ggplot() + 
-#'   geom_neuron(banc.brain_neuropil, 
+#' ggplot() +
+#'   geom_neuron(banc.brain_neuropil,
 #'               rotation_matrix = banc_view,
-#'               cols = c("grey75", "grey50"), 
+#'               cols = c("grey75", "grey50"),
 #'               alpha = 0.3)
 #' }
 "banc.brain_neuropil"
@@ -176,9 +176,7 @@
 #'
 #' @description
 #' A list of simplified mesh3d objects representing the 3D surface reconstructions
-#' of 5 LHPD2a1 neurons from the BANC connectome dataset. These meshes have been
-#' decimated to approximately 20% of their original face count for efficient
-#' visualisation whilst preserving morphological features.
+#' of 4 LHPD2a1 neurons from the BANC connectome dataset.
 #'
 #' @format A list of 5 mesh3d objects, each containing vertices and faces defining
 #' the 3D surface of a neuron.
@@ -204,15 +202,15 @@
 #' \dontrun{
 #' library(nat.ggplot)
 #' library(ggplot2)
-#' 
+#'
 #' # Plot first neuron mesh
-#' ggplot() + 
-#'   geom_neuron(banc.meshes[[1]], 
+#' ggplot() +
+#'   geom_neuron(banc.meshes[[1]],
 #'               rotation_matrix = banc_view,
 #'               cols = c("purple", "magenta"))
-#' 
+#'
 #' # Plot all neuron meshes
-#' ggneuron(banc.meshes, 
+#' ggneuron(banc.meshes,
 #'          rotation_matrix = banc_view,
 #'          cols = c("purple", "magenta"))
 #' }
@@ -223,7 +221,7 @@
 #' @description
 #' A 4x4 rotation matrix for displaying BANC connectome data in a frontal view.
 #' This matrix can be applied to any 3D neuroanatomy data to rotate it into a
-#' standard frontal viewing orientation.
+#' standard frontal viewing orientation. Provded as an example for the user.
 #'
 #' @format A 4x4 numeric matrix representing a 3D rotation transformation.
 #'
@@ -239,17 +237,17 @@
 #' library(nat.ggplot)
 #' library(nat)
 #' library(ggplot2)
-#' 
+#'
 #' # Use the frontal view for plotting
-#' ggplot() + 
+#' ggplot() +
 #'   geom_neuron(banc.skels, rotation_matrix = banc_view)
-#' 
+#'
 #' # Create a custom view interactively
 #' plot3d(banc.brain_neuropil)
 #' # Rotate to desired angle with mouse
 #' my_view <- rgl_view()$userMatrix
 #' # Use custom view
-#' ggplot() + 
+#' ggplot() +
 #'   geom_neuron(banc.brain_neuropil, rotation_matrix = my_view)
 #' }
 "banc_view"

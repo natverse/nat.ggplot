@@ -64,7 +64,7 @@ ggneuron(banc.brain_neuropil,
          cols1 = c("lightblue", "darkblue"))
 
 # Visualise split neurons with custom colours
-ggneuron(bc.neurons.flow,
+ggneuron(banc.neurons.flow,
          volume = banc.brain_neuropil,
          rotation_matrix = banc_view,
          info = "LHPD2a1 neurons with axon/dendrite split")

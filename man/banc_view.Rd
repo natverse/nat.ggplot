@@ -16,7 +16,7 @@ banc_view
 \description{
 A 4x4 rotation matrix for displaying BANC connectome data in a frontal view.
 This matrix can be applied to any 3D neuroanatomy data to rotate it into a
-standard frontal viewing orientation.
+standard frontal viewing orientation. Provded as an example for the user.
 }
 \details{
 Users can create their own custom rotation matrices interactively using the
@@ -30,7 +30,7 @@ library(nat)
 library(ggplot2)
 
 # Use the frontal view for plotting
-ggplot() + 
+ggplot() +
   geom_neuron(banc.skels, rotation_matrix = banc_view)
 
 # Create a custom view interactively
@@ -38,7 +38,7 @@ plot3d(banc.brain_neuropil)
 # Rotate to desired angle with mouse
 my_view <- rgl_view()$userMatrix
 # Use custom view
-ggplot() + 
+ggplot() +
   geom_neuron(banc.brain_neuropil, rotation_matrix = my_view)
 }
 }

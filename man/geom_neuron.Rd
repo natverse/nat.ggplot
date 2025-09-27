@@ -254,7 +254,7 @@ g.anat +
 
 # Plot split neurons showing axon/dendrite
 g.anat +
-  geom_neuron(bc.neurons.flow[[1]],
+  geom_neuron(banc.neurons.flow[[1]],
               rotation_matrix = banc_view)
 
 # Plot synapses as points

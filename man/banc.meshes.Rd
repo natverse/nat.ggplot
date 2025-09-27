@@ -17,9 +17,7 @@ banc.meshes
 }
 \description{
 A list of simplified mesh3d objects representing the 3D surface reconstructions
-of 5 LHPD2a1 neurons from the BANC connectome dataset. These meshes have been
-decimated to approximately 20\% of their original face count for efficient
-visualisation whilst preserving morphological features.
+of 4 LHPD2a1 neurons from the BANC connectome dataset.
 }
 \examples{
 \dontrun{
@@ -27,13 +25,13 @@ library(nat.ggplot)
 library(ggplot2)
 
 # Plot first neuron mesh
-ggplot() + 
-  geom_neuron(banc.meshes[[1]], 
+ggplot() +
+  geom_neuron(banc.meshes[[1]],
               rotation_matrix = banc_view,
               cols = c("purple", "magenta"))
 
 # Plot all neuron meshes
-ggneuron(banc.meshes, 
+ggneuron(banc.meshes,
          rotation_matrix = banc_view,
          cols = c("purple", "magenta"))
 }

@@ -3,7 +3,7 @@
 \docType{data}
 \name{g.anat}
 \alias{g.anat}
-\title{Base ggplot2 Theme for Neuroanatomy Plots}
+\title{Base ggplot2 Template for Neuroanatomy Plots}
 \format{
 A ggplot2 object with:
 \describe{
@@ -20,7 +20,7 @@ A ggplot2 object with:
 g.anat
 }
 \description{
-A pre-configured ggplot2 object with a minimal theme optimised for
+A pre-configured ggplot2 template with a minimal theme optimised for
 neuroanatomy visualisations. This object provides a clean base with no axes,
 grids, or extraneous elements, allowing the focus to remain on the
 neuroanatomical structures.

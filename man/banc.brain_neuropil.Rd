@@ -25,16 +25,16 @@ library(nat.ggplot)
 library(ggplot2)
 
 # Plot brain neuropil with default view
-ggplot() + 
-  geom_neuron(banc.brain_neuropil, 
-              cols = c("grey75", "grey50"), 
+ggplot() +
+  geom_neuron(banc.brain_neuropil,
+              cols = c("grey75", "grey50"),
               alpha = 0.3)
 
 # Plot with frontal view
-ggplot() + 
-  geom_neuron(banc.brain_neuropil, 
+ggplot() +
+  geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
-              cols = c("grey75", "grey50"), 
+              cols = c("grey75", "grey50"),
               alpha = 0.3)
 }
 }

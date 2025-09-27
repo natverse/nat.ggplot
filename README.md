@@ -1,14 +1,11 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 <!-- badges: start -->
 [![natverse](https://img.shields.io/badge/natverse-Part%20of%20the%20natverse-a241b6)](https://natverse.github.io)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)](https://natverse.github.io/nat.ggplot/reference/)
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+![Comprehensive figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure_comprehensive.png?raw=true)
 
 # nat.ggplot
 
@@ -48,7 +45,7 @@ if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
 # Visualise neurons with default settings
 p <- ggneuron(banc.meshes, rotation_matrix = banc_view)
 p
-ggsave(file.path(output_dir, "quickstart_basic.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "quickstart_basic.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Basic visualisation](https://github.com/natverse/nat.ggplot/blob/main/inst/images/quickstart_basic.png?raw=true)
@@ -70,12 +67,13 @@ p <- g.anat +
               cols = c("#6D2C7B", "#FF1493", "green", "blue"),
               alpha = 0.3) +
   geom_neuron(banc.skels_smoothed,
-              size = 0.05,
+              size = 0.01,
+              alpa = 0.1,
               root = 2,
               rotation_matrix = banc_view,
               cols = "black")
 p
-ggsave(file.path(output_dir, "quickstart_custom.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "quickstart_custom.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Customised visualisation](https://github.com/natverse/nat.ggplot/blob/main/inst/images/quickstart_custom.png?raw=true)
@@ -135,7 +133,7 @@ plots <- list()
 for(view_name in names(views)) {
   plots[[view_name]] <- ggneuron(
     banc.meshes,
-    volume = banc.brain_neuropil,
+    volume = NULL, # banc.brain_neuropil,
     rotation_matrix = views[[view_name]],
     cols1 = c("#8B1A89", "#FF69B4"),
     cols2 = c("grey95", "grey85"),
@@ -147,27 +145,26 @@ for(view_name in names(views)) {
 
 # Display and save individual views
 plots$side
-ggsave(file.path(output_dir, "view_side.png"), plots$side, width = 5, height = 5, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "view_side.png"), plots$side, width = 5, height = 5, dpi = 300, bg = "white")
 
 plots$front
-ggsave(file.path(output_dir, "view_front.png"), plots$front, width = 5, height = 5, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "view_front.png"), plots$front, width = 5, height = 5, dpi = 300, bg = "white")
 
 # Create a collage using cowplot
 if (requireNamespace("cowplot", quietly = TRUE)) {
   library(cowplot)
   # Combine plots in a 2x2 grid
   collage <- plot_grid(
-    plots$front + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
-    plots$side + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
-    plots$dorsal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
-    plots$ventral + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    plots$front + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
+    plots$side + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
+    plots$dorsal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
+    plots$ventral + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
     ncol = 2,
     labels = c("A", "B", "C", "D"),
     label_size = 12
-  ) +
-  ggplot2::theme(legend.position = "none")
+  )
   collage
-  ggsave(file.path(output_dir, "views_collage.png"), collage, width = 10, height = 10, dpi = 150, bg = "white")
+  ggsave(file.path(output_dir, "views_collage.png"), collage, width = 10, height = 10, dpi = 300, bg = "white")
 }
 ```
 
@@ -184,7 +181,7 @@ p <- ggneuron(banc.brain_neuropil,
               cols1 = c("grey", "#EFC7E6"), 
               alpha = 0.5)
 p
-ggsave(file.path(output_dir, "brain_neuropil.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "brain_neuropil.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Brain neuropil](https://github.com/natverse/nat.ggplot/blob/main/inst/images/brain_neuropil.png?raw=true)
@@ -200,7 +197,7 @@ p <- g.anat +
               rotation_matrix = banc_view,
               cols = c("purple"))
 p
-ggsave(file.path(output_dir, "neurons_single_colour.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "neurons_single_colour.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Single colour](https://github.com/natverse/nat.ggplot/blob/main/inst/images/neurons_single_colour.png?raw=true)
@@ -212,7 +209,7 @@ p <- g.anat +
               rotation_matrix = banc_view,
               cols = c("purple", "orange"))
 p
-ggsave(file.path(output_dir, "neurons_gradient.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "neurons_gradient.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Gradient colouring](https://github.com/natverse/nat.ggplot/blob/main/inst/images/neurons_gradient.png?raw=true)
@@ -229,7 +226,7 @@ p <- g.anat +
               rotation_matrix = banc_view,
               cols = neuron_colours)
 p
-ggsave(file.path(output_dir, "neurons_multi_colour.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "neurons_multi_colour.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Multiple colours](https://github.com/natverse/nat.ggplot/blob/main/inst/images/neurons_multi_colour.png?raw=true)
@@ -260,7 +257,7 @@ p <- g.anat +
              cols = c("#1BB6AF", "#121B56"),
              alpha = 0.6)
 p
-ggsave(file.path(output_dir, "synapses_visualisation.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "synapses_visualisation.png"), p, width = 7, height = 7, dpi = 300, bg = "white")
 ```
 
 ![Synapse visualisation](https://github.com/natverse/nat.ggplot/blob/main/inst/images/synapses_visualisation.png?raw=true)
@@ -271,25 +268,25 @@ Visualise neurons with compartments coloured by their functional identity (using
 
 ``` r
 # Single neuron with axon/dendrite split
-p <- ggneuron(bc.neurons.flow[[1]], 
-              threshold = 10000, # Max distance over which a line is drawn between matchign arbour
+p <- ggneuron(banc.neurons.flow[[1]], 
+              threshold = 20000, # Max distance over which a line is drawn between matching arbour
               rotation_matrix = banc_view,
-              info = paste("neuron: ", names(bc.neurons.flow)[1]))
+              info = paste("neuron: ", names(banc.neurons.flow)[1]))
 p
-ggsave(file.path(output_dir, "split_single_neuron.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "split_single_neuron.png"), p, width = 6, height = 6, dpi = 300, bg = "white")
 ```
 
 ![Single split neuron](https://github.com/natverse/nat.ggplot/blob/main/inst/images/split_single_neuron.png?raw=true)
 
 ``` r
 # All split neurons with brain context
-p <- ggneuron(bc.neurons.flow,
-              volume = banc.brain_neuropil,
-              threshold = 10000,
+p <- ggneuron(banc.neurons.flow,
+              #volume = banc.brain_neuropil,
+              threshold = 20000,
               rotation_matrix = banc_view,
               info = "LHPD2a1 neurons:\n axon (orange), dendrite (cyan), primary neurite (purple), linker (green)\n inputs (navy), outputs (red)")
 p
-ggsave(file.path(output_dir, "split_all_neurons.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "split_all_neurons.png"), p, width = 7, height = 7, dpi = 300, bg = "white")
 ```
 
 ![All split neurons](https://github.com/natverse/nat.ggplot/blob/main/inst/images/split_all_neurons.png?raw=true)
@@ -329,8 +326,8 @@ p <- g.anat +
               cols = c("grey60", "grey40"),
               alpha = 0.8) +
   # Add split neurons
-  geom_neuron(bc.neurons.flow,
-              threshold = 10000,
+  geom_neuron(banc.neurons.flow,
+              threshold = 30000,
               root = 2,
               size = 0.1,
               rotation_matrix = banc_view) +
@@ -348,7 +345,7 @@ p
 
 # Save figure
 # ggsave("lhpd2a1_neurons.pdf", p, width = 12, height = 12, dpi = 300)
-ggsave(file.path(output_dir, "figure_comprehensive.png"), p, width = 7, height = 7, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "figure_comprehensive.png"), p, width = 7, height = 7, dpi = 300, bg = "white")
 ```
 
 ![Comprehensive figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure_comprehensive.png?raw=true)
@@ -374,12 +371,12 @@ library(cowplot)  # For combining plots
 p1 <- g.anat + 
   geom_neuron(banc.skels_smoothed[[1]], rotation_matrix = banc_view) +
   ggtitle("Neuron 1")
-ggsave(file.path(output_dir, "panel_neuron1.png"), p1, width = 4, height = 4, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "panel_neuron1.png"), p1, width = 4, height = 4, dpi = 300, bg = "white")
 
 p2 <- g.anat + 
   geom_neuron(banc.skels_smoothed[[2]], rotation_matrix = banc_view) +
   ggtitle("Neuron 2")
-ggsave(file.path(output_dir, "panel_neuron2.png"), p2, width = 4, height = 4, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "panel_neuron2.png"), p2, width = 4, height = 4, dpi = 300, bg = "white")
 
 # Alternative 1: Use cowplot for combining plots
 if (requireNamespace("cowplot", quietly = TRUE)) {
@@ -392,7 +389,7 @@ if (requireNamespace("cowplot", quietly = TRUE)) {
   # Combine with cowplot
   p_combined <- plot_grid(p1_clean, p2_clean, ncol = 2, labels = c("A", "B"))
   p_combined
-  ggsave(file.path(output_dir, "panels_combined_cowplot.png"), p_combined, width = 8, height = 4, dpi = 150, bg = "white")
+  ggsave(file.path(output_dir, "panels_combined_cowplot.png"), p_combined, width = 8, height = 4, dpi = 300, bg = "white")
 }
 
 # Alternative 2: Use gridExtra for combining plots
@@ -405,7 +402,7 @@ if (requireNamespace("gridExtra", quietly = TRUE)) {
   
   # Arrange in grid
   p_combined <- grid.arrange(g1, g2, ncol = 2)
-  ggsave(file.path(output_dir, "panels_combined_gridextra.png"), p_combined, width = 8, height = 4, dpi = 150, bg = "white")
+  ggsave(file.path(output_dir, "panels_combined_gridextra.png"), p_combined, width = 8, height = 4, dpi = 300, bg = "white")
 }
 
 # Alternative 3: Use base R graphics with png files
@@ -422,7 +419,7 @@ if (requireNamespace("magick", quietly = TRUE)) {
   img_combined <- image_append(c(img1, img2))
   
   # Save combined image
-  image_write(img_combined, file.path(output_dir, "panels_combined_magick.png"))
+  image_write(img_combined, file.path(output_dir, "panels_combined_cowplot.png"))
 }
 ```
 
@@ -440,7 +437,7 @@ p_thin <- g.anat +
               size = 0.2,  # Thin lines
               cols = c("#FF1493", "#8B008B")) +
   ggtitle("Thin lines (size = 0.2)")
-ggsave(file.path(output_dir, "size_thin.png"), p_thin, width = 5, height = 5, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "size_thin.png"), p_thin, width = 5, height = 5, dpi = 300, bg = "white")
 
 p_normal <- g.anat + 
   geom_neuron(banc.skels_smoothed, 
@@ -448,7 +445,7 @@ p_normal <- g.anat +
               size = 0.5,  # Default
               cols = c("#FF1493", "#8B008B")) +
   ggtitle("Normal lines (size = 0.5)")
-ggsave(file.path(output_dir, "size_normal.png"), p_normal, width = 5, height = 5, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "size_normal.png"), p_normal, width = 5, height = 5, dpi = 300, bg = "white")
 
 p_thick <- g.anat + 
   geom_neuron(banc.skels_smoothed, 
@@ -456,21 +453,22 @@ p_thick <- g.anat +
               size = 1,  # Thick lines
               cols = c("#FF1493", "#8B008B")) +
   ggtitle("Thick lines (size = 1)")
-ggsave(file.path(output_dir, "size_thick.png"), p_thick, width = 5, height = 5, dpi = 150, bg = "white")
+ggsave(file.path(output_dir, "size_thick.png"), p_thick, width = 5, height = 5, dpi = 300, bg = "white")
 
 # Combine using cowplot
 if (requireNamespace("cowplot", quietly = TRUE)) {
   library(cowplot)
   size_comparison <- plot_grid(
-    p_thin + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
-    p_normal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
-    p_thick + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10)),
+    p_thin + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
+    p_normal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
+    p_thick + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
     ncol = 3,
     labels = c("A", "B", "C"),
     label_size = 10
-  )
+  ) +
+  ggplot2::theme(legend.position = "none")
   size_comparison
-  ggsave(file.path(output_dir, "size_comparison.png"), size_comparison, width = 12, height = 4, dpi = 150, bg = "white")
+  ggsave(file.path(output_dir, "size_comparison.png"), size_comparison, width = 12, height = 4, dpi = 300, bg = "white")
 }
 ```
 

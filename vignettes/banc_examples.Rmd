@@ -168,10 +168,10 @@ ggsave(file.path(output_dir, "synapses_visualisation.png"), p, width = 7, height
 <!-- from README section: nat.ggplot / Example Gallery / Axon-Dendrite Split Visualisation -->
 ```{r}
 # Single neuron with axon/dendrite split
-p <- ggneuron(bc.neurons.flow[[1]], 
+p <- ggneuron(banc.neurons.flow[[1]], 
               threshold = 10000, # Max distance over which a line is drawn between matchign arbour
               rotation_matrix = banc_view,
-              info = paste("neuron: ", names(bc.neurons.flow)[1]))
+              info = paste("neuron: ", names(banc.neurons.flow)[1]))
 p
 ggsave(file.path(output_dir, "split_single_neuron.png"), p, width = 6, height = 6, dpi = 150, bg = "white")
 ```
@@ -179,7 +179,7 @@ ggsave(file.path(output_dir, "split_single_neuron.png"), p, width = 6, height = 
 <!-- from README section: nat.ggplot / Example Gallery / Axon-Dendrite Split Visualisation -->
 ```{r}
 # All split neurons with brain context
-p <- ggneuron(bc.neurons.flow,
+p <- ggneuron(banc.neurons.flow,
               volume = banc.brain_neuropil,
               threshold = 10000,
               rotation_matrix = banc_view,
@@ -220,7 +220,7 @@ p <- g.anat +
               cols = c("grey60", "grey40"),
               alpha = 0.8) +
   # Add split neurons
-  geom_neuron(bc.neurons.flow,
+  geom_neuron(banc.neurons.flow,
               threshold = 10000,
               rotation_matrix = banc_view) +
   # Zoom to neuron mesh bounds

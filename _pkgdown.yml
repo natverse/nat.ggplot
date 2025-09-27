@@ -1,0 +1,42 @@
+url: https://natverse.github.io/nat.ggplot/
+template:
+  bootstrap: 5
+  bslib:
+    preset: bootstrap
+
+navbar:
+  structure:
+    left: [home, reference, articles, news]
+    right: [github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/natverse/nat.ggplot
+
+home:
+  title: "nat.ggplot"
+  description: "ggplot2-based visualisation for natverse neurons & meshes"
+
+authors:
+  Alexander Bates:
+    href: https://orcid.org/0000-0002-1195-0445
+
+reference:
+  - title: Plotting
+    contents:
+      - ggneuron
+      - starts_with("geom_")
+  - title: Utilities
+    contents:
+      - rgl_view
+      - matches("^ggplot2_")
+  - title: Data
+    contents:
+      - banc.neurons.flow
+      - banc.neurons.skels
+      - banc.meshes
+
+articles:
+  - title: Getting started
+    contents:
+      - banc_examples

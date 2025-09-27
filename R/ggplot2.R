@@ -178,7 +178,7 @@ ggplot2_neuron_path.NULL <- function(x, rotation_matrix = NULL, ...) {
 #'
 #' # Plot split neurons showing axon/dendrite
 #' g.anat +
-#'   geom_neuron(bc.neurons.flow[[1]],
+#'   geom_neuron(banc.neurons.flow[[1]],
 #'               rotation_matrix = banc_view)
 #'
 #' # Plot synapses as points
@@ -247,7 +247,7 @@ geom_neuron.neuron <- function(x = NULL,
                        ...),
     ggplot2::geom_point(mapping = ggplot2::aes(x = .data$X, y = .data$Y),
                         data = soma,
-                        color = cols[1],
+                        color = "black", #cols[1],
                         size = root,
                         ...),
     ggplot2::scale_color_gradient(low = cols[1],
@@ -689,7 +689,9 @@ geom_neuron.splitneuron <- function(x = NULL,
     # },
     ggplot2::geom_point(mapping = ggplot2::aes(x = .data$X, y = .data$Y),
                         data = soma,
-                        color = cols[1], alpha = 0.75, size = root)
+                        color = "black", #cols[1],
+                        alpha = 0.75,
+                        size = root)
   )
 
   # And synapses?
@@ -764,7 +766,7 @@ geom_neuron.splitneuron <- function(x = NULL,
 #'          cols1 = c("lightblue", "darkblue"))
 #'
 #' # Visualise split neurons with custom colours
-#' ggneuron(bc.neurons.flow,
+#' ggneuron(banc.neurons.flow,
 #'          volume = banc.brain_neuropil,
 #'          rotation_matrix = banc_view,
 #'          info = "LHPD2a1 neurons with axon/dendrite split")
@@ -809,8 +811,7 @@ ggneuron <- function(x,
     ggplot2::labs(title = info)
 }
 
-#' @method prune_vertices synapticneuron
-#' @export
+# hidden
 prune_vertices.synapticneuron <- function (x, verticestoprune, invert = FALSE, ...){
   if(length(verticestoprune)==nrow(x$d)){
     warning('no points left after pruning')

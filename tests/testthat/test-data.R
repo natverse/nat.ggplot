@@ -46,12 +46,12 @@ test_that("banc.syns is a valid data.frame", {
   expect_true(all(banc.syns$prepost %in% c(0, 1)))
 })
 
-test_that("bc.neurons.flow contains split neurons", {
-  expect_s3_class(bc.neurons.flow, "neuronlist")
-  expect_true(length(bc.neurons.flow) > 0)
+test_that("banc.neurons.flow contains split neurons", {
+  expect_s3_class(banc.neurons.flow, "neuronlist")
+  expect_true(length(banc.neurons.flow) > 0)
   
   # Check first neuron has split labels
-  first_neuron <- bc.neurons.flow[[1]]
+  first_neuron <- banc.neurons.flow[[1]]
   expect_s3_class(first_neuron, "neuron")
   expect_true("Label" %in% colnames(first_neuron$d))
   
@@ -78,7 +78,7 @@ test_that("banc_view is a valid rotation matrix", {
 test_that("all data objects have consistent BANC IDs", {
   # Check that neuron names are consistent
   expect_equal(names(banc.skels), names(banc.meshes))
-  expect_equal(names(banc.skels), names(bc.neurons.flow))
+  expect_equal(names(banc.skels), names(banc.neurons.flow))
   
   # All should be BANC IDs (large numbers as strings)
   ids <- names(banc.skels)

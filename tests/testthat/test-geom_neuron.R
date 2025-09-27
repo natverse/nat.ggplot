@@ -83,8 +83,8 @@ test_that("geom_neuron works with rotation matrices", {
 
 test_that("geom_neuron handles split neurons", {
   # Test with split neuron
-  if (length(bc.neurons.flow) > 0) {
-    result <- geom_neuron(bc.neurons.flow[[1]])
+  if (length(banc.neurons.flow) > 0) {
+    result <- geom_neuron(banc.neurons.flow[[1]])
     
     expect_type(result, "list")
     expect_true(length(result) > 0)

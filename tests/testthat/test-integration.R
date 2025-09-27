@@ -33,8 +33,8 @@ test_that("Complete workflow produces valid plots", {
   expect_s3_class(p4, "ggplot")
   
   # 5. Split neurons
-  if (length(bc.neurons.flow) > 0) {
-    p5 <- ggneuron(bc.neurons.flow[[1]], 
+  if (length(banc.neurons.flow) > 0) {
+    p5 <- ggneuron(banc.neurons.flow[[1]], 
                    rotation_matrix = banc_view)
     expect_s3_class(p5, "ggplot")
   }

@@ -11,10 +11,10 @@ Authors@R:
            comment = c(ORCID = "0000-0002-1195-0445")))
 Description: Functions for creating neuroanatomy plots in the ggplot2 style.
 License: GPL-3 + file LICENSE
-URL: https://github.com/natverse/nat.ggplot, https://natverse.github.io/nat.ggplot/
+URL: https://github.com/natverse/nat.ggplot, https://natverse.github.io/nat.ggplot/, http://natverse.org/nat.ggplot/
 BugReports: https://github.com/natverse/nat.ggplot/issues
 Depends: 
-    R (>= 3.5.0,
+    R (>= 3.5.0)
 Imports: 
     nat,
     ggplot2 (>= 3.5),

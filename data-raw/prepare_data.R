@@ -63,13 +63,13 @@ banc.syns <- do.call(rbind, nat::nlapply(banc.neurons.syns, function(x) {
 rownames(banc.syns) <- 1:nrow(banc.syns)
 
 # Split skeletons
-bc.neurons.flow <- hemibrainr::flow_centrality(banc.neurons.syns,
+banc.neurons.flow <- hemibrainr::flow_centrality(banc.neurons.syns,
                                                mode = "centrifugal",
                                                polypre = TRUE,
                                                split = "synapses",
                                                .parallel = FALSE,
                                                OmitFailures = FALSE)
-bc.neurons.flow[,] <- meta
+banc.neurons.flow[,] <- meta
 
 # # Make a lower res BANC brain mesh
 banc.brain_neuropil <- as.mesh3d(bancr::banc_brain_neuropil.surf)
@@ -88,16 +88,16 @@ usethis::use_data(
   compress = "xz"
 )
 
-# Save skeletons: bc.neurons.flow
+# Save skeletons: banc.neurons.flow
 usethis::use_data(
   banc.skels,
   overwrite = TRUE,
   compress = "xz"
 )
 
-# Save split skeletons: bc.neurons.flow
+# Save split skeletons: banc.neurons.flow
 usethis::use_data(
-  bc.neurons.flow,
+  banc.neurons.flow,
   overwrite = TRUE,
   compress = "xz"
 )
