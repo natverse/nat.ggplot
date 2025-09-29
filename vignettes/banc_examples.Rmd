@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 Load packages
 
-```{r}
+```{r packages}
 library(nat.ggplot)
 library(ggplot2)
 library(dplyr)
@@ -29,7 +29,7 @@ library(dplyr)
 
 A minimal 2D view of neuron meshes with a predefined rotation matrix.
 
-```{r}
+```{r basic}
 nat.ggplot::ggneuron(banc.meshes, rotation_matrix = banc_view)
 ```
 
@@ -39,7 +39,7 @@ nat.ggplot::ggneuron(banc.meshes, rotation_matrix = banc_view)
 
 Layer meshes, a brain outline, and smoothed skeletons.
 
-```{r}
+```{r brain_and_smooth}
 # Smooth skeletons for presentation
 banc.skels_smoothed <- nat::nlapply(banc.skels, nat::smooth_neuron, sigma = 5000)
 
@@ -72,7 +72,7 @@ nat.ggplot::g.anat +
 
 Use `nat::plot3d()` and `rgl` to rotate interactively, then capture the view. Disabled during build.
 
-```{r, eval=FALSE}
+```{r rgl, eval=FALSE}
 if (requireNamespace("rgl", quietly = TRUE)) {
   nat::plot3d(banc.brain_neuropil, alpha = 0.3, col = "grey")
   nat::plot3d(banc.skels_smoothed)
@@ -87,7 +87,7 @@ if (requireNamespace("rgl", quietly = TRUE)) {
 
 Define rotation matrices and reuse them to render consistent views.
 
-```{r}
+```{r views}
 views <- list(
   side = structure(c(0.000764884985983372, 0.0153511334210634, 
     -0.99988180398941, 0, -0.940421104431152, -0.339961022138596, 
@@ -124,7 +124,7 @@ nat.ggplot::ggneuron(
 
 Render the neuropil mesh as a translucent context layer.
 
-```{r}
+```{r backdrop}
 nat.ggplot::ggneuron(
   banc.brain_neuropil,
   rotation_matrix = banc_view,
@@ -139,7 +139,7 @@ nat.ggplot::ggneuron(
 
 Single colour, gradient, and per-neuron palettes.
 
-```{r}
+```{r single}
 # Single colour
 nat.ggplot::g.anat +
   nat.ggplot::geom_neuron(
@@ -149,7 +149,7 @@ nat.ggplot::g.anat +
   )
 ```
 
-```{r}
+```{r gradient}
 # Gradient along arbour / depth
 nat.ggplot::g.anat +
   nat.ggplot::geom_neuron(
@@ -159,7 +159,7 @@ nat.ggplot::g.anat +
   )
 ```
 
-```{r}
+```{r multicolour}
 # Distinct colours per neuron
 neuron_colours <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8")
 
@@ -183,7 +183,7 @@ nat.ggplot::g.anat +
 
 Overlay synaptic sites as points; separate by `prepost` (0 = outputs, 1 = inputs).
 
-```{r}
+```{r synapses}
 syns_pre  <- dplyr::filter(banc.syns, prepost == 0)
 syns_post <- dplyr::filter(banc.syns, prepost == 1)
 
@@ -216,7 +216,7 @@ nat.ggplot::g.anat +
 
 Colour compartments using flow-centrality-based identities.
 
-```{r}
+```{r flow}
 # Single neuron
 nat.ggplot::ggneuron(
   banc.neurons.flow[[1]],
@@ -226,7 +226,7 @@ nat.ggplot::ggneuron(
 )
 ```
 
-```{r}
+```{r many_flow}
 # Multiple neurons (with optional brain volume)
 nat.ggplot::ggneuron(
   banc.neurons.flow,
@@ -243,7 +243,7 @@ nat.ggplot::ggneuron(
 
 Compute a bounding box in the rotated plane; zoom with `ggplot2::coord_fixed()`.
 
-```{r}
+```{r bounded}
 mesh_bounds <- do.call(rbind, lapply(banc.meshes, function(mesh) {
   vertices <- t(mesh$vb[-4, ])
   if (!is.null(banc_view)) {
