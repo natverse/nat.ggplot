@@ -232,7 +232,7 @@ geom_neuron.neuron <- function(x = NULL,
   if(is.null(soma)|ncol(soma)!=3){
     soma <- nat::xyzmatrix(x)[nat::rootpoints(x), , drop = FALSE]
   }
-  soma <- t(as.data.frame(soma, ncol = 3))
+  soma <-as.data.frame(soma, ncol = 3)
   if(!is.null(rotation_matrix)){
     soma <- as.data.frame(t(rotation_matrix[,1:3] %*% t(nat::xyzmatrix(soma))), ncol = 3)
     soma <- soma[,-4]
@@ -599,7 +599,7 @@ geom_neuron.splitneuron <- function(x = NULL,
   if(is.null(soma)|ncol(soma)!=3){
     soma <- nat::xyzmatrix(x)[nat::rootpoints(x), , drop = FALSE]
   }
-  soma <- t(as.data.frame(soma, ncol = 3))
+  soma <-as.data.frame(soma, ncol = 3)
   if(!is.null(rotation_matrix)){
     soma <- as.data.frame(t(rotation_matrix[,1:3] %*% t(nat::xyzmatrix(soma))))
     soma <- soma[,-4]
