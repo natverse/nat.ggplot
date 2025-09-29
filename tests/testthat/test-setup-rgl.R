@@ -1,3 +1,3 @@
 if (requireNamespace("rgl", quietly = TRUE)) {
-  rgl::rgl.useNULL(TRUE)
+  rgl::rgl.useNULL()
 }
