@@ -51,7 +51,7 @@ test_that("Plots can be saved without error", {
 
   # This should not error
   expect_silent(
-    ggsave(temp_file, p, width = 5, height = 5, dpi = 100)
+    ggplot2::ggsave(temp_file, p, width = 5, height = 5, dpi = 100)
   )
 
   # Check file was created

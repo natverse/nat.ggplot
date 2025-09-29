@@ -337,7 +337,7 @@ p <- g.anat +
               size = 0.1,
               rotation_matrix = banc_view) +
   # Zoom to neuron mesh bounds
-  coord_fixed(xlim = c(x_range[1] - x_padding, x_range[2] + x_padding),
+  ggplot2::coord_fixed(xlim = c(x_range[1] - x_padding, x_range[2] + x_padding),
               ylim = c(y_range[1] - y_padding, y_range[2] + y_padding)) +
   # Add title
   theme(plot.background = element_rect(fill = "white", color = NA),

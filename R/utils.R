@@ -176,3 +176,4 @@ is_named_all <- function(x, require_unique = FALSE) {
   }
   ok
 }
+

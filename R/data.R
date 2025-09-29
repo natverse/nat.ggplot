@@ -79,10 +79,10 @@
 #'
 #' # Plot synapses coloured by type
 #' ggplot(banc.syns, aes(x = X, y = Y)) +
-#'   geom_point(aes(colour = factor(prepost)), alpha = 0.5) +
-#'   scale_colour_manual(values = c("0" = "#D72000", "1" = "#132157"),
+#'   ggplot2::geom_point(ggplot2::aes(colour = factor(prepost)), alpha = 0.5) +
+#'   ggplot2::scale_colour_manual(values = c("0" = "#D72000", "1" = "#132157"),
 #'                      labels = c("Presynaptic", "Postsynaptic")) +
-#'   coord_fixed()
+#'   ggplot2::coord_fixed()
 #' }
 "banc.syns"
 

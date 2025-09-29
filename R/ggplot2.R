@@ -603,28 +603,37 @@ geom_neuron.splitneuron <- function(x = NULL,
 
   # Get cable
   dendrites <- tryCatch(nat::prune_vertices(x,
+                                            .progress = FALSE,
                                             verticestoprune = as.integer(setdiff(rownames(x$d),dendrites.v))),
                         error = function(e) NULL)
   axon <- tryCatch(nat::prune_vertices(x,
+                                       .progress = FALSE,
                                        verticestoprune = as.integer(setdiff(rownames(x$d),axon.v))),
                    error = function(e) NULL)
-  p.d <- tryCatch(nat::prune_vertices(x, verticestoprune = as.integer(setdiff(rownames(x$d),p.d.v))),
+  p.d <- tryCatch(nat::prune_vertices(x,
+                                      .progress = FALSE,
+                                      verticestoprune = as.integer(setdiff(rownames(x$d),p.d.v))),
                   error = function(e) NULL)
-  p.n <- tryCatch(nat::prune_vertices(x, verticestoprune = as.integer(setdiff(rownames(x$d),p.n.v))),
+  p.n <- tryCatch(nat::prune_vertices(x,
+                                      .progress = FALSE,
+                                      verticestoprune = as.integer(setdiff(rownames(x$d),p.n.v))),
                   error = function(e) NULL)
-  nulls <- tryCatch(nat::prune_vertices(x, verticestoprune = as.integer(setdiff(rownames(x$d),null.v))),
+  nulls <- tryCatch(nat::prune_vertices(x,
+                                        .progress = FALSE,
+                                        verticestoprune = as.integer(setdiff(rownames(x$d),null.v))),
                     error = function(e) NULL)
 
   # Stitch subtree
-  dendrites <- tryCatch(nat::stitch_neurons_mst(dendrites, threshold=threshold), error = function(e) NULL)
-  axon <- tryCatch(nat::stitch_neurons_mst(axon, threshold=threshold), error = function(e) NULL)
-  p.d <- tryCatch(nat::stitch_neurons_mst(p.d, threshold=threshold), error = function(e) NULL)
-  p.n <- tryCatch(nat::stitch_neurons_mst(p.n, threshold=threshold), error = function(e) NULL)
+  dendrites <- tryCatch(nat::stitch_neurons_mst(dendrites, threshold=threshold, .progress = FALSE), error = function(e) NULL)
+  axon <- tryCatch(nat::stitch_neurons_mst(axon, threshold=threshold, .progress = FALSE), error = function(e) NULL)
+  p.d <- tryCatch(nat::stitch_neurons_mst(p.d, threshold=threshold), .progress = FALSE, error = function(e) NULL)
+  p.n <- tryCatch(nat::stitch_neurons_mst(p.n, threshold=threshold, .progress = FALSE), error = function(e) NULL)
 
   # Make into a multi-segment neuronlist
   nulls <- nat::nlapply(1:length(nulls$SubTrees), function(subt) tryCatch(nat::prune_vertices(nulls,
                                                                                               verticestoprune = unlist(nulls$SubTrees[[subt]]),
-                                                                                              invert = TRUE),
+                                                                                              invert = TRUE,
+                                                                                              .progress = FALSE),
                                                                           error = function(e) NULL),
                         .progress = FALSE)
   nulls <- nulls[unlist(lapply(nulls, length))>0]
