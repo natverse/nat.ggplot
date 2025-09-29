@@ -120,27 +120,28 @@ rgl_view <- function () {
 #'
 #' @examples
 #' \dontrun{
-#' # Use g.anat as the base for plotting neurons
 #' g.anat +
 #'   nat.ggplot::geom_neuron(banc.skels, rotation_matrix = banc_view)
 #'
-#' # Add multiple layers
 #' g.anat +
-#'   nat.ggplot::geom_neuron(banc.brain_neuropil,
-#'               rotation_matrix = banc_view,
-#'               cols = c("grey95", "grey85"),
-#'               alpha = 0.3) +
-#'   nat.ggplot::geom_neuron(banc.skels,
-#'               rotation_matrix = banc_view,
-#'               cols = c("purple", "magenta"))
+#'   nat.ggplot::geom_neuron(
+#'     banc.brain_neuropil,
+#'     rotation_matrix = banc_view,
+#'     cols = c("grey95","grey85"),
+#'     alpha = 0.3
+#'   ) +
+#'   nat.ggplot::geom_neuron(
+#'     banc.skels,
+#'     rotation_matrix = banc_view,
+#'     cols = c("purple","magenta")
+#'   )
 #' }
 #'
 #' @seealso \code{\link{geom_neuron}}, \code{\link{ggneuron}}
-#'
 #' @export
 g.anat <- ggplot2::ggplot() +
-  ggplot2::coord_fixed() +                 # fixed aspect ratio (needed by tests)
-  ggplot2::theme_void() +                  # start from a blank canvas
+  ggplot2::coord_fixed() +
+  ggplot2::theme_void() +
   ggplot2::guides(fill = "none", colour = "none") +
   ggplot2::theme(
     legend.position   = "none",
@@ -161,7 +162,6 @@ g.anat <- ggplot2::ggplot() +
     plot.background   = ggplot2::element_blank()
   ) +
   ggplot2::labs(title = "")
-
 
 # hidden
 is_named_all <- function(x, require_unique = FALSE) {
