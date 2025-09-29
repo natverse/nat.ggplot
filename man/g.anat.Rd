@@ -31,19 +31,21 @@ Simply add your \code{geom_neuron()} layers to this base object.
 }
 \examples{
 \dontrun{
-# Use g.anat as the base for plotting neurons
 g.anat +
   nat.ggplot::geom_neuron(banc.skels, rotation_matrix = banc_view)
 
-# Add multiple layers
 g.anat +
-  nat.ggplot::geom_neuron(banc.brain_neuropil,
-              rotation_matrix = banc_view,
-              cols = c("grey95", "grey85"),
-              alpha = 0.3) +
-  nat.ggplot::geom_neuron(banc.skels,
-              rotation_matrix = banc_view,
-              cols = c("purple", "magenta"))
+  nat.ggplot::geom_neuron(
+    banc.brain_neuropil,
+    rotation_matrix = banc_view,
+    cols = c("grey95","grey85"),
+    alpha = 0.3
+  ) +
+  nat.ggplot::geom_neuron(
+    banc.skels,
+    rotation_matrix = banc_view,
+    cols = c("purple","magenta")
+  )
 }
 
 }
