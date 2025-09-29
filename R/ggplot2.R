@@ -587,7 +587,11 @@ geom_neuron.splitneuron <- function(x = NULL,
   if(root){
     x$tags$soma <- nat::rootpoints(x)
   }
-  soma <- nat::xyzmatrix(x)[nat::rootpoints(x),] # catmaid::soma(x)
+  soma <- if (requireNamespace("catmaid", quietly = TRUE)) {
+    catmaid::soma(x)
+  } else {
+    nat::xyzmatrix(x)[nat::rootpoints(x), , drop = FALSE]
+  }
   soma <- t(as.data.frame(soma))
   if(!is.null(rotation_matrix)){
     soma <- as.data.frame(t(rotation_matrix[,1:3] %*% t(nat::xyzmatrix(soma))))
@@ -826,9 +830,17 @@ prune_vertices.synapticneuron <- function (x, verticestoprune, invert = FALSE, .
     warning('no points left after pruning')
     return(NULL)
   }
-  soma <- catmaid::somaid(x)
+  soma <- if (requireNamespace("catmaid", quietly = TRUE)) {
+    catmaid::somaid(x)
+  } else {
+    nat::rootpoints(x)[1]
+  }
   if(!is.null(soma)&&!is.na(soma)){
-    x$d[catmaid::somaindex(x),"Label"] <- 1
+    if (requireNamespace("catmaid", quietly = TRUE)) {
+      x$d[catmaid::somaindex(x),"Label"] <- 1
+    } else {
+      x$d[soma,"Label"] <- 1
+    }
   }
   pruned <- nat::prune_vertices(x, verticestoprune, invert = invert, ...)
   root <- nat::rootpoints(x)

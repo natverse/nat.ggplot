@@ -1,6 +1,6 @@
 Package: nat.ggplot
 Type: Package
-Title: Functions for Creating Neuroanatomy Plots with ggplot2 and nat
+Title: Functions for Creating Neuroanatomy Plots with ggplot2 and Nat
 Version: 0.1.0
 Authors@R:
     c(person(given = "Alexander",
@@ -15,7 +15,7 @@ BugReports: https://github.com/natverse/nat.ggplot/issues
 Depends:
     R (>= 4.1)
 Imports:
-    nat,
+    nat (>= 1.10.4),
     ggplot2 (>= 3.5.0),
     dplyr,
     rlang,
@@ -25,7 +25,11 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    spelling
+    spelling,
+    catmaid
+Remotes: 
+    natverse/nat,
+    catmaid=natverse/rcatmaid
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8

@@ -124,4 +124,8 @@ usethis::use_data(
   compress = "xz"
 )
 
+# Recompress
+tools::resaveRdaFiles("data", compress = "xz")
+
+
 

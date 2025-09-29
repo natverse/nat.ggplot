@@ -487,7 +487,7 @@ This package was developed by Alexander Shakeel Bates while in the laboratory of
 
 Key papers referenced in this package:
 
-- Bates, A. S., Phelps, J. S., Kim, M., Yang, H. H., Matsliah, A., Ajabi, Z., Perlman, E., et al. (2025). Distributed control circuits across a brain-and-cord connectome. *bioRxiv*. doi: [10.1101/2025.07.31.667571](https://doi.org/10.1101/2025.07.31.667571v2)
+- Bates, A. S., Phelps, J. S., Kim, M., Yang, H. H., Matsliah, A., Ajabi, Z., Perlman, E., et al. (2025). Distributed control circuits across a brain-and-cord connectome. *bioRxiv*. doi: [10.1101/2025.07.31.667571](https://doi.org/10.1101/2025.07.31.667571)
 
 - Bates, Alexander Shakeel, James D. Manton, Sridhar R. Jagannathan, Marta Costa, Philipp Schlegel, Torsten Rohlfing, and Gregory Sxe Jefferis. 2020. “The Natverse, a Versatile Toolbox for Combining and Analysing Neuroanatomical Data.” eLife 9 (April). [eLife.53350](https://doi.org/10.7554/eLife.53350)
 
