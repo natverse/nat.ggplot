@@ -148,10 +148,10 @@ is_named_all <- function(x, require_unique = FALSE) {
 #'
 #' @seealso \code{\link{geom_neuron}}, \code{\link{ggneuron}}
 #' @export
-gganat <- .build_g_anat()
+gganat <- .build_gganat()
 
 #' @noRd
-.build_g_anat <- function() {
+.build_gganat <- function() {
   ggplot2::ggplot() +
     ggplot2::coord_fixed() +                 # required by tests
     ggplot2::theme_void() +                  # blank canvas
