@@ -107,7 +107,12 @@ test_that("Coordinate limits can be set", {
     ggplot2::coord_fixed(xlim = c(-1000, 1000), ylim = c(-1000, 1000))
 
   expect_s3_class(p, "ggplot")
-  expect_s3_class(p$coordinates, "CoordFixed")
+  expect_true(
+    inherits(p$coordinates, "CoordFixed") || inherits(p$coordinates, "CoordCartesian")
+  )
+  if (inherits(p$coordinates, "CoordCartesian")) {
+    expect_true(is.numeric(p$coordinates$ratio) && length(p$coordinates$ratio) == 1)
+  }
   expect_equal(p$coordinates$limits$x, c(-1000, 1000))
   expect_equal(p$coordinates$limits$y, c(-1000, 1000))
 })
