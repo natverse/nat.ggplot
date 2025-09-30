@@ -331,7 +331,7 @@ p <- gganat +
               alpha = 0.8) +
   # Add split neurons
   geom_neuron(banc.neurons.flow,
-              threshold = 15000,
+              threshold = 20000,
               root = 2,
               size = 0.1,
               rotation_matrix = banc_view) +

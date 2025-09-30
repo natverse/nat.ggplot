@@ -1,8 +1,8 @@
 # hidden
 .build_gganat <- function() {
   ggplot2::ggplot() +
-    ggplot2::coord_fixed() +                 # tests expect CoordFixed present
-    ggplot2::theme_void() +                  # ensures a theme is present
+    ggplot2::coord_fixed() +
+    ggplot2::theme_void() +
     ggplot2::guides(fill = "none", colour = "none") +
     ggplot2::theme(
       legend.position   = "none",
@@ -20,7 +20,7 @@
       panel.spacing     = ggplot2::unit(0, "cm"),
       panel.border      = ggplot2::element_blank(),
       panel.background  = ggplot2::element_blank(),
-      plot.background   = ggplot2::element_blank()
+      plot.background = ggplot2::element_rect(fill='transparent', color=NA)
     ) +
     ggplot2::labs(title = "")
 }
@@ -31,7 +31,8 @@
 #' A pre-configured ggplot2 template with a minimal theme optimised for
 #' neuroanatomy visualisations. This object provides a clean base with no axes,
 #' grids, or extraneous elements, allowing the focus to remain on the
-#' neuroanatomical structures.
+#' neuroanatomical structures. Plot background is transparent
+#' (which is really annoying to do with an rgl plot, via with rgl.postscript)
 #'
 #' @format A ggplot2 object with:
 #' \describe{

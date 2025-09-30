@@ -23,7 +23,8 @@ gganat
 A pre-configured ggplot2 template with a minimal theme optimised for
 neuroanatomy visualisations. This object provides a clean base with no axes,
 grids, or extraneous elements, allowing the focus to remain on the
-neuroanatomical structures.
+neuroanatomical structures. Plot background is transparent
+(which is really annoying to do with an rgl plot, via with rgl.postscript)
 }
 \details{
 Use \code{gganat} as the base for neuroanatomy plots instead of \code{ggplot()}.
