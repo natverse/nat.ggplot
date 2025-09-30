@@ -427,7 +427,7 @@ if (requireNamespace("magick", quietly = TRUE)) {
 }
 ```
 
-![Combined panels](https://github.com/natverse/nat.ggplot/blob/main/inst/images/panels_combined.png?raw=true)
+![Combined panels](https://github.com/natverse/nat.ggplot/blob/main/inst/images/panels_combined_cowplot.png?raw=true)
 
 ### Controlling Line Width
 
