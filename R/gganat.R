@@ -57,8 +57,7 @@
 #' @export
 gganat <- .build_gganat()
 
-# ---- Namespace load hook (CI-safe) -------------------------------------------
-
+# Hidden
 .onLoad <- function(libname, pkgname) {
   # Re-assign canonical object at load-time to prevent any accidental redefinition
   assign("gganat", .build_gganat(), envir = asNamespace(pkgname))
