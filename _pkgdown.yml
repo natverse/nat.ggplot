@@ -26,7 +26,7 @@ reference:
     contents:
       - ggneuron
       - starts_with("geom_")
-      - g.anat
+      - gganat
   - title: Utilities
     contents:
       - rgl_view

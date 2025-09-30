@@ -95,14 +95,14 @@ test_that("geom_neuron handles split neurons", {
   }
 })
 
-test_that("geom_neuron can be added to g.anat", {
-  # Test that geom_neuron works with g.anat base
-  p <- g.anat + geom_neuron(banc.skels[[1]])
+test_that("geom_neuron can be added to gganat", {
+  # Test that geom_neuron works with gganat base
+  p <- gganat + geom_neuron(banc.skels[[1]])
   
   expect_s3_class(p, "ggplot")
   
   # Test multiple layers
-  p2 <- g.anat + 
+  p2 <- gganat + 
     geom_neuron(banc.brain_neuropil, cols = c("grey90", "grey60"), alpha = 0.3) +
     geom_neuron(banc.skels)
   

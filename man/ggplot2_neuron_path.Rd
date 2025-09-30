@@ -45,8 +45,8 @@ library(nat.ggplot)
 neuron_data <- ggplot2_neuron_path(banc.skels[[1]])
 head(neuron_data)
 
-# Plot with g.anat base
-g.anat +
+# Plot with gganat base
+gganat +
   geom_path(data = neuron_data,
             aes(x = X, y = Y, group = group))
 

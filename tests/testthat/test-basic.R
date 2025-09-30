@@ -6,7 +6,7 @@ test_that("Package loads and has expected functions", {
   expect_true(exists("ggneuron"))
   expect_true(exists("ggplot2_neuron_path"))
   expect_true(exists("rgl_view"))
-  expect_true(exists("g.anat"))
+  expect_true(exists("gganat"))
 })
 
 test_that("Basic neuron plotting works", {
@@ -17,7 +17,7 @@ test_that("Basic neuron plotting works", {
   data(banc_view)
   
   # Create basic plot
-  p <- g.anat + geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
+  p <- gganat + geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
   expect_s3_class(p, "ggplot")
 })
 

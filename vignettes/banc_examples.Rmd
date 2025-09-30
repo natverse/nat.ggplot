@@ -43,7 +43,7 @@ Layer meshes, a brain outline, and smoothed skeletons.
 # Smooth skeletons for presentation
 banc.skels_smoothed <- nat::nlapply(banc.skels, nat::smooth_neuron, sigma = 5000)
 
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.brain_neuropil,
     rotation_matrix = banc_view,
@@ -141,7 +141,7 @@ Single colour, gradient, and per-neuron palettes.
 
 ```{r single}
 # Single colour
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.skels_smoothed,
     rotation_matrix = banc_view,
@@ -151,7 +151,7 @@ nat.ggplot::g.anat +
 
 ```{r gradient}
 # Gradient along arbour / depth
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.meshes[1],
     rotation_matrix = banc_view,
@@ -163,7 +163,7 @@ nat.ggplot::g.anat +
 # Distinct colours per neuron
 neuron_colours <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8")
 
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.brain_neuropil,
     rotation_matrix = banc_view,
@@ -187,7 +187,7 @@ Overlay synaptic sites as points; separate by `prepost` (0 = outputs, 1 = inputs
 syns_pre  <- dplyr::filter(banc.syns, prepost == 0)
 syns_post <- dplyr::filter(banc.syns, prepost == 1)
 
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.meshes,
     rotation_matrix = banc_view,
@@ -257,7 +257,7 @@ y_range <- range(mesh_bounds$Y)
 x_padding <- diff(x_range) * 0.1
 y_padding <- diff(y_range) * 0.1
 
-nat.ggplot::g.anat +
+nat.ggplot::gganat +
   nat.ggplot::geom_neuron(
     banc.brain_neuropil,
     rotation_matrix = banc_view,

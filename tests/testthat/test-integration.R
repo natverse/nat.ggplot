@@ -2,19 +2,19 @@ test_that("Complete workflow produces valid plots", {
   # Test complete workflow from data to plot
 
   # 1. Simple neuron plot
-  p1 <- g.anat +
+  p1 <- gganat +
     geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
   expect_s3_class(p1, "ggplot")
 
   # 2. Multiple neurons with colours
-  p2 <- g.anat +
+  p2 <- gganat +
     geom_neuron(banc.skels,
                 rotation_matrix = banc_view,
                 cols = c("purple", "orange"))
   expect_s3_class(p2, "ggplot")
 
   # 3. Brain mesh with neurons
-  p3 <- g.anat +
+  p3 <- gganat +
     geom_neuron(banc.brain_neuropil,
                 rotation_matrix = banc_view,
                 cols = c("grey90", "grey70"),
@@ -25,7 +25,7 @@ test_that("Complete workflow produces valid plots", {
 
   # 4. Synapses as points
   synapse_coords <- as.matrix(banc.syns[1:100, c("X", "Y", "Z")])
-  p4 <- g.anat +
+  p4 <- gganat +
     geom_neuron(synapse_coords,
                 rotation_matrix = banc_view,
                 root = 0.5,
@@ -44,7 +44,7 @@ test_that("Plots can be saved without error", {
   skip_if_not(dir.exists(tempdir()))
 
   # Create a simple plot
-  p <- g.anat + geom_neuron(banc.skels[[1]])
+  p <- gganat + geom_neuron(banc.skels[[1]])
 
   # Test saving to temporary file
   temp_file <- tempfile(fileext = ".png")
@@ -63,7 +63,7 @@ test_that("Plots can be saved without error", {
 
 test_that("Different neuron types can be combined", {
   # Combine different object types in one plot
-  p <- g.anat +
+  p <- gganat +
     # Mesh
     geom_neuron(banc.brain_neuropil,
                 rotation_matrix = banc_view,
@@ -87,9 +87,9 @@ test_that("Different neuron types can be combined", {
 
 test_that("Size parameter affects line width", {
   # Create plots with different sizes
-  p_thin <- g.anat +
+  p_thin <- gganat +
     geom_neuron(banc.skels[[1]], size = 0.1)
-  p_thick <- g.anat +
+  p_thick <- gganat +
     geom_neuron(banc.skels[[1]], size = 2)
 
   expect_s3_class(p_thin, "ggplot")
@@ -102,7 +102,7 @@ test_that("Size parameter affects line width", {
 
 test_that("Coordinate limits can be set", {
   # Test zooming with coord_fixed
-  p <- g.anat +
+  p <- gganat +
     geom_neuron(banc.skels[[1]], rotation_matrix = banc_view) +
     ggplot2::coord_fixed(xlim = c(-1000, 1000), ylim = c(-1000, 1000))
 
@@ -115,16 +115,16 @@ test_that("Coordinate limits can be set", {
 test_that("Empty or invalid data handled gracefully", {
   # Empty neuronlist
   empty_nl <- nat::neuronlist()
-  p1 <- g.anat + geom_neuron(empty_nl)
+  p1 <- gganat + geom_neuron(empty_nl)
   expect_s3_class(p1, "ggplot")
 
   # NULL input
-  p2 <- g.anat + geom_neuron(NULL)
+  p2 <- gganat + geom_neuron(NULL)
   expect_s3_class(p2, "ggplot")
 
   # Empty matrix
   empty_matrix <- matrix(ncol = 3, nrow = 0)
   colnames(empty_matrix) <- c("X", "Y", "Z")
-  p3 <- g.anat + geom_neuron(empty_matrix)
+  p3 <- gganat + geom_neuron(empty_matrix)
   expect_s3_class(p3, "ggplot")
 })

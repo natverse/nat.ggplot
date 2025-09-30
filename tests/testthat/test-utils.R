@@ -11,18 +11,18 @@ test_that("rgl_view returns expected structure", {
   }
 })
 
-test_that("g.anat is a valid ggplot object", {
-  expect_s3_class(g.anat, "ggplot")
+test_that("gganat is a valid ggplot object", {
+  expect_s3_class(gganat, "ggplot")
 
   # Check that it has expected theme elements
-  expect_true("theme" %in% names(g.anat))
-  expect_true("coordinates" %in% names(g.anat))
+  expect_true("theme" %in% names(gganat))
+  expect_true("coordinates" %in% names(gganat))
 
   # Check coord_fixed is applied
-  expect_s3_class(g.anat$coordinates, "CoordFixed")
+  expect_s3_class(gganat$coordinates, "CoordFixed")
 
   # Can add layers to it
-  p <- g.anat + ggplot2::geom_point(data = data.frame(x = 1, y = 1), ggplot2::aes(x, y))
+  p <- gganat + ggplot2::geom_point(data = data.frame(x = 1, y = 1), ggplot2::aes(x, y))
   expect_s3_class(p, "ggplot")
 })
 

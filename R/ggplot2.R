@@ -26,8 +26,8 @@
 #' neuron_data <- ggplot2_neuron_path(banc.skels[[1]])
 #' head(neuron_data)
 #'
-#' # Plot with g.anat base
-#' g.anat +
+#' # Plot with gganat base
+#' gganat +
 #'   geom_path(data = neuron_data,
 #'             aes(x = X, y = Y, group = group))
 #'
@@ -160,29 +160,29 @@ ggplot2_neuron_path.NULL <- function(x, rotation_matrix = NULL, ...) {
 #' library(nat.ggplot)
 #'
 #' # Plot a single neuron
-#' g.anat +
+#' gganat +
 #'   geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
 #'
 #' # Plot all neurons with custom colours
-#' g.anat +
+#' gganat +
 #'   geom_neuron(banc.skels,
 #'               rotation_matrix = banc_view,
 #'               cols = c("purple", "magenta"))
 #'
 #' # Plot brain mesh as context
-#' g.anat +
+#' gganat +
 #'   geom_neuron(banc.brain_neuropil,
 #'               rotation_matrix = banc_view,
 #'               cols = c("grey75", "grey50"),
 #'               alpha = 0.3)
 #'
 #' # Plot split neurons showing axon/dendrite
-#' g.anat +
+#' gganat +
 #'   geom_neuron(banc.neurons.flow[[1]],
 #'               rotation_matrix = banc_view)
 #'
 #' # Plot synapses as points
-#' g.anat +
+#' gganat +
 #'   geom_neuron(as.matrix(banc.syns[, c("X", "Y", "Z")]),
 #'               rotation_matrix = banc_view,
 #'               root = 0.5,
@@ -816,7 +816,7 @@ ggneuron <- function(x,
                      alpha = 0.5,
                      title.col = "darkgrey",
                      ...){
-  g.anat +
+  gganat +
     {if(!is.null(volume)){
       geom_neuron(x = volume, rotation_matrix = rotation_matrix, alpha = max(alpha-0.25,0.01), cols = cols2)
     }} +

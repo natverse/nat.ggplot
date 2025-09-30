@@ -236,29 +236,29 @@ it colours axonal and dendritic compartments differently.
 library(nat.ggplot)
 
 # Plot a single neuron
-g.anat +
+gganat +
   geom_neuron(banc.skels[[1]], rotation_matrix = banc_view)
 
 # Plot all neurons with custom colours
-g.anat +
+gganat +
   geom_neuron(banc.skels,
               rotation_matrix = banc_view,
               cols = c("purple", "magenta"))
 
 # Plot brain mesh as context
-g.anat +
+gganat +
   geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
               cols = c("grey75", "grey50"),
               alpha = 0.3)
 
 # Plot split neurons showing axon/dendrite
-g.anat +
+gganat +
   geom_neuron(banc.neurons.flow[[1]],
               rotation_matrix = banc_view)
 
 # Plot synapses as points
-g.anat +
+gganat +
   geom_neuron(as.matrix(banc.syns[, c("X", "Y", "Z")]),
               rotation_matrix = banc_view,
               root = 0.5,

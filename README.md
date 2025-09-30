@@ -61,8 +61,8 @@ Here is a more complicated plot, with a brain mesh, neuron meshes, their skeleto
 # Smooth neurons for better presentation
 banc.skels_smoothed <- nat::nlapply(banc.skels,nat::smooth_neuron,sigma = 5000)
 
-# Customise visualisation with g.anat base
-p <- g.anat + 
+# Customise visualisation with gganat base
+p <- gganat + 
   geom_neuron(banc.brain_neuropil, 
               rotation_matrix = banc_view,
               cols = c("grey90", "grey60"),
@@ -197,7 +197,7 @@ Visualise multiple neurons with different colouring schemes:
 
 ``` r
 # All neurons in one colour
-p <- g.anat +
+p <- gganat +
   geom_neuron(banc.skels_smoothed,
               rotation_matrix = banc_view,
               cols = c("purple"))
@@ -209,7 +209,7 @@ ggsave(file.path(output_dir, "neurons_single_colour.png"), p, width = 6, height 
 
 ``` r
 # Colour gradient in the Z dimension:
-p <- g.anat +
+p <- gganat +
   geom_neuron(banc.meshes[1],
               rotation_matrix = banc_view,
               cols = c("purple", "orange"))
@@ -222,7 +222,7 @@ ggsave(file.path(output_dir, "neurons_gradient.png"), p, width = 6, height = 6, 
 ``` r
 # Each neuron in a different colour
 neuron_colours <- c("#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8")
-p <- g.anat +
+p <- gganat +
   geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
               cols = c("grey95", "grey80"),
@@ -242,7 +242,7 @@ Display synaptic sites as coloured points:
 
 ``` r
 # Create synapse visualisation
-p <- g.anat +
+p <- gganat +
   # Neuron meshes
   geom_neuron(banc.meshes,
               rotation_matrix = banc_view,
@@ -319,7 +319,7 @@ y_range <- range(mesh_bounds$Y)
 x_padding <- diff(x_range) * 0.1
 y_padding <- diff(y_range) * 0.1
 
-p <- g.anat +
+p <- gganat +
   # Add brain outline
   geom_neuron(banc.brain_neuropil,
               rotation_matrix = banc_view,
@@ -373,12 +373,12 @@ library(ggplot2)
 library(cowplot)  # For combining plots
 
 # Create multiple panels - save individually
-p1 <- g.anat + 
+p1 <- gganat + 
   geom_neuron(banc.skels_smoothed[[1]], rotation_matrix = banc_view) +
   ggtitle("Neuron 1")
 ggsave(file.path(output_dir, "panel_neuron1.png"), p1, width = 4, height = 4, dpi = 300, bg = "white")
 
-p2 <- g.anat + 
+p2 <- gganat + 
   geom_neuron(banc.skels_smoothed[[2]], rotation_matrix = banc_view) +
   ggtitle("Neuron 2")
 ggsave(file.path(output_dir, "panel_neuron2.png"), p2, width = 4, height = 4, dpi = 300, bg = "white")
@@ -436,7 +436,7 @@ The `size` parameter controls the thickness of neuron skeleton lines:
 
 ``` r
 # Create plots with different line widths
-p_thin <- g.anat + 
+p_thin <- gganat + 
   geom_neuron(banc.skels_smoothed, 
               rotation_matrix = banc_view,
               size = 0.2,  # Thin lines
@@ -444,7 +444,7 @@ p_thin <- g.anat +
   ggtitle("Thin lines (size = 0.2)")
 ggsave(file.path(output_dir, "size_thin.png"), p_thin, width = 5, height = 5, dpi = 300, bg = "white")
 
-p_normal <- g.anat + 
+p_normal <- gganat + 
   geom_neuron(banc.skels_smoothed, 
               rotation_matrix = banc_view,
               size = 0.5,  # Default
@@ -452,7 +452,7 @@ p_normal <- g.anat +
   ggtitle("Normal lines (size = 0.5)")
 ggsave(file.path(output_dir, "size_normal.png"), p_normal, width = 5, height = 5, dpi = 300, bg = "white")
 
-p_thick <- g.anat + 
+p_thick <- gganat + 
   geom_neuron(banc.skels_smoothed, 
               rotation_matrix = banc_view,
               size = 1,  # Thick lines
