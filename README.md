@@ -2,7 +2,6 @@
 [![natverse](https://img.shields.io/badge/natverse-Part%20of%20the%20natverse-a241b6)]( https://natverse.org/)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Docs](https://img.shields.io/badge/docs-100%25-brightgreen.svg)]( https://natverse.org//nat.ggplot/reference/)
-![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -14,6 +13,8 @@
 
 See [nat](https://natverse.org/) for details on reading neuroanatomy data into R.
 
+![figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure.png?raw=true)
+
 ## About Neuron Objects
 
 In the [natverse ecosystem](https://natverse.org/), neurons are represented as tree structures containing 3D coordinates and connectivity information. The main data structures include:
@@ -24,8 +25,6 @@ In the [natverse ecosystem](https://natverse.org/), neurons are represented as t
 - **Synaptic information**: Pre- and postsynaptic site locations that can be overlaid on morphology
 
 For more details, see the [natverse neurons introduction](https://natverse.org/nat/articles/neurons-intro.html)
-
-![figure](https://github.com/natverse/nat.ggplot/blob/main/inst/images/figure.png?raw=true)
 
 ## Installation
 
@@ -464,9 +463,9 @@ ggsave(file.path(output_dir, "size_thick.png"), p_thick, width = 5, height = 5, 
 if (requireNamespace("cowplot", quietly = TRUE)) {
   library(cowplot)
   size_comparison <- plot_grid(
-    p_thin + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
-    p_normal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
-    p_thick + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10, legend.position = "none")),
+    p_thin + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
+    p_normal + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
+    p_thick + theme_void() + theme(plot.title = element_text(hjust = 0.5, size = 10), legend.position = "none"),
     ncol = 3,
     labels = c("A", "B", "C"),
     label_size = 10
