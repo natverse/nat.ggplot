@@ -19,7 +19,7 @@ Imports:
     ggplot2 (>= 3.5.0),
     dplyr,
     rlang,
-    ggnewscale
+    ggnewscale (>= 0.5.2)
 Suggests:
     rgl,
     testthat (>= 3.0.0),
