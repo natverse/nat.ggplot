@@ -5,13 +5,30 @@
   "upload_type": "software",
   "access_right": "open",
   "creators": [
-    {"name": "Bates, Alexander Shakeel", "orcid": "0000-0002-1195-0445", "affiliation": "Harvard Medical School"}
+    {
+      "name": "Bates, Alexander Shakeel",
+      "orcid": "0000-0002-1195-0445",
+      "affiliation": "Harvard Medical School"
+    }
+  ],
+  "grants": [
+    {
+      "id": "10.13039/100010269::222782/Z/21/Z"
+    }
   ],
   "keywords": [
-    "connectomics", "Drosophila", "ggplot2", "natverse",
-    "neuroanatomy", "visualisation"
+    "connectomics",
+    "Drosophila",
+    "ggplot2",
+    "natverse",
+    "neuroanatomy",
+    "visualisation"
   ],
   "related_identifiers": [
-    {"relation": "isSupplementTo", "identifier": "10.1101/2025.07.31.667571", "resource_type": "publication-preprint"}
+    {
+      "relation": "isSupplementTo",
+      "identifier": "10.1101/2025.07.31.667571",
+      "resource_type": "publication-preprint"
+    }
   ]
 }
