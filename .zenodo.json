@@ -1,0 +1,17 @@
+{
+  "title": "nat.ggplot: ggplot2 plots for natverse neuroanatomy",
+  "description": "Functions for creating neuroanatomy plots in the ggplot2 style for natverse neuron and mesh objects. Used by BANC-project, bancpipeline, and other natverse-downstream analyses to render per-neuron / per-region 2D figures.",
+  "license": "GPL-3.0-only",
+  "upload_type": "software",
+  "access_right": "open",
+  "creators": [
+    {"name": "Bates, Alexander Shakeel", "orcid": "0000-0002-1195-0445", "affiliation": "Harvard Medical School"}
+  ],
+  "keywords": [
+    "connectomics", "Drosophila", "ggplot2", "natverse",
+    "neuroanatomy", "visualisation"
+  ],
+  "related_identifiers": [
+    {"relation": "isSupplementTo", "identifier": "10.1101/2025.07.31.667571", "resource_type": "publication-preprint"}
+  ]
+}
