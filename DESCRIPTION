@@ -1,7 +1,7 @@
 Package: nat.ggplot
 Type: Package
 Title: Functions for Creating Neuroanatomy Plots with ggplot2 and Nat
-Version: 1.0.0
+Version: 1.1.0
 Authors@R:
     c(person(given = "Alexander",
              family = "Bates",
@@ -22,6 +22,8 @@ Imports:
     ggnewscale (>= 0.5.2)
 Suggests:
     rgl,
+    gifski,
+    magick,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
@@ -37,4 +39,4 @@ Language: en-GB
 LazyData: true
 LazyDataCompression: xz
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

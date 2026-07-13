@@ -478,6 +478,33 @@ if (requireNamespace("cowplot", quietly = TRUE)) {
 
 ![Line width comparison](https://github.com/natverse/nat.ggplot/blob/main/inst/images/size_comparison.png?raw=true)
 
+### Animations
+
+`ggneuron_gif()` animates a *sequence* of object states into a GIF — a morph, a
+developmental series, or (below) a simple turntable — reusing `geom_neuron()` for each
+frame and assembling them with `gifski` (or `magick`). Each entry of `flows` is a
+per-frame list of objects; `volume`/`targets` add static context, and `alpha` may be
+given per structure (here a translucent brain around solid neurons).
+
+``` r
+# a turntable: each "frame" is the scene rotated a little further about the vertical
+cen  <- colMeans(nat::xyzmatrix(banc.brain_neuropil))
+spin <- function(obj, th) {
+  R <- matrix(c(cos(th), -sin(th), 0, sin(th), cos(th), 0, 0, 0, 1), 3, byrow = TRUE)
+  nat::xyzmatrix(obj) <- sweep(sweep(nat::xyzmatrix(obj), 2, cen) %*% t(R), 2, -cen)
+  obj
+}
+ang <- head(seq(0, 2*pi, length.out = 19), -1)
+ggneuron_gif(
+  list(brain   = lapply(ang, function(th) spin(banc.brain_neuropil, th)),
+       neurons = lapply(ang, function(th) spin(banc.skels[1:6], th))),
+  cols  = list(brain = "grey65", neurons = "#C70E7B"),
+  alpha = c(brain = 0.10, neurons = 0.95),   # translucent brain, solid neurons
+  rotation_matrix = banc_view, pingpong = FALSE, file = "ggneuron_gif_demo.gif")
+```
+
+![Rotating brain with neurons](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)
+
 ## Acknowledgements
 
 This package was developed by Alexander Shakeel Bates while in the laboratory of Rachel I. Wilson at Harvard Medical School. The package leverages the [natverse]( https://natverse.org/) ecosystem for neuroanatomy in R.
