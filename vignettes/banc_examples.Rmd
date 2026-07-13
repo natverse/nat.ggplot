@@ -374,8 +374,8 @@ grp <- function(b) {
   else "midbrain"
 }
 grp_ramp <- list(optic=c("#1BA3C6","#B3ECF7"), sez=c("#2CB11B","#CBEFA0"),
-                 mb=c("#9B4F96","#E7BCE0"), cx=c("#F2A104","#FFE6A3"),
-                 midbrain=c("#EE4266","#FBB8C4"))
+                 mb=c("#C1478E","#EDBFE0"), cx=c("#F5850B","#FFD24D"),
+                 midbrain=c("#C1275E","#F2A6C2"))
 groups <- vapply(base, grp, character(1)); cols <- setNames(character(length(regs)), regs)
 for (g in names(grp_ramp)) { gb <- unique(base[groups == g]); if (!length(gb)) next
   ramp <- setNames(grDevices::colorRampPalette(grp_ramp[[g]])(length(gb)), gb)

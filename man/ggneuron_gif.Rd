@@ -25,7 +25,7 @@ ggneuron_gif(
   fixed_limits = TRUE,
   centre = NULL,
   turntable_frames = 36L,
-  spin_axis = c("y", "x", "z")
+  spin_axis = c("z", "y", "x")
 )
 }
 \arguments{

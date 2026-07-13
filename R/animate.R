@@ -72,7 +72,7 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
                          target_alpha = 0.18, alpha = 0.6, rotation_matrix = NULL,
                          file = NULL, width = 900, height = 800, delay = 0.14,
                          dpi = 96, pingpong = TRUE, fixed_limits = TRUE,
-                         centre = NULL, turntable_frames = 36L, spin_axis = c("y", "x", "z")) {
+                         centre = NULL, turntable_frames = 36L, spin_axis = c("z", "y", "x")) {
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("ggneuron_gif() needs the 'ggplot2' package.", call. = FALSE)
   spin_axis <- match.arg(spin_axis)
@@ -88,12 +88,10 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
              else if (!is.null(volume)) colMeans(nat::xyzmatrix(volume))
              else colMeans(nat::xyzmatrix(x))
       angs <- utils::head(seq(0, 2 * pi, length.out = turntable_frames + 1L), -1L)
-      # Spin in the plane of the view (about the view NORMAL, row 3 of rotation_matrix)
-      # so the object keeps its face to the camera and turns cleanly rather than
-      # tumbling edge-on; without a view matrix, use the requested world axis. Rotate
-      # about that axis with Rodrigues' formula.
-      ax <- if (!is.null(rotation_matrix)) rotation_matrix[3, 1:3]
-            else switch(spin_axis, x = c(1, 0, 0), y = c(0, 1, 0), z = c(0, 0, 1))
+      # Spin about a world axis (default Z, the usual dorsal-ventral / up axis for
+      # natverse brain data) via Rodrigues' formula; the view is set separately by
+      # rotation_matrix. Pick spin_axis to suit your object's up direction.
+      ax <- switch(spin_axis, x = c(1, 0, 0), y = c(0, 1, 0), z = c(0, 0, 1))
       ax <- ax / sqrt(sum(ax^2))
       K  <- matrix(c(0, -ax[3], ax[2], ax[3], 0, -ax[1], -ax[2], ax[1], 0), 3, byrow = TRUE)
       Rmat <- function(th) diag(3) + sin(th) * K + (1 - cos(th)) * (K %*% K)
