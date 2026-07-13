@@ -1,7 +1,7 @@
 Package: nat.ggplot
 Type: Package
 Title: Functions for Creating Neuroanatomy Plots with ggplot2 and Nat
-Version: 1.1.1
+Version: 1.1.2
 Authors@R:
     c(person(given = "Alexander",
              family = "Bates",
@@ -28,10 +28,12 @@ Suggests:
     knitr,
     rmarkdown,
     spelling,
-    catmaid
+    catmaid,
+    nat.flybrains
 Remotes: 
     natverse/nat,
-    catmaid=natverse/rcatmaid
+    catmaid=natverse/rcatmaid,
+    natverse/nat.flybrains
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8

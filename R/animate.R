@@ -88,10 +88,15 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
              else if (!is.null(volume)) colMeans(nat::xyzmatrix(volume))
              else colMeans(nat::xyzmatrix(x))
       angs <- utils::head(seq(0, 2 * pi, length.out = turntable_frames + 1L), -1L)
-      Rmat <- function(th) { cc <- cos(th); ss <- sin(th); switch(spin_axis,
-        y = matrix(c(cc, 0, ss, 0, 1, 0, -ss, 0, cc), 3, byrow = TRUE),
-        x = matrix(c(1, 0, 0, 0, cc, -ss, 0, ss, cc), 3, byrow = TRUE),
-        z = matrix(c(cc, -ss, 0, ss, cc, 0, 0, 0, 1), 3, byrow = TRUE)) }
+      # Spin in the plane of the view (about the view NORMAL, row 3 of rotation_matrix)
+      # so the object keeps its face to the camera and turns cleanly rather than
+      # tumbling edge-on; without a view matrix, use the requested world axis. Rotate
+      # about that axis with Rodrigues' formula.
+      ax <- if (!is.null(rotation_matrix)) rotation_matrix[3, 1:3]
+            else switch(spin_axis, x = c(1, 0, 0), y = c(0, 1, 0), z = c(0, 0, 1))
+      ax <- ax / sqrt(sum(ax^2))
+      K  <- matrix(c(0, -ax[3], ax[2], ax[3], 0, -ax[1], -ax[2], ax[1], 0), 3, byrow = TRUE)
+      Rmat <- function(th) diag(3) + sin(th) * K + (1 - cos(th)) * (K %*% K)
       spin <- function(o, th) { V <- nat::xyzmatrix(o)
         nat::xyzmatrix(o) <- sweep(sweep(V, 2, ctr) %*% t(Rmat(th)), 2, -ctr); o }
       flows <- list()
