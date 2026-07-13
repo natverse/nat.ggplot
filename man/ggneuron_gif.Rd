@@ -25,7 +25,12 @@ ggneuron_gif(
   fixed_limits = TRUE,
   centre = NULL,
   turntable_frames = 36L,
-  spin_axis = c("z", "y", "x")
+  spin_axis = c("z", "y", "x"),
+  points = NULL,
+  point_cols = NULL,
+  point_size = 3,
+  point_alpha = 1,
+  point_stroke = 0.8
 )
 }
 \arguments{
@@ -80,6 +85,16 @@ the camera appear to zoom; set \code{FALSE} to let each frame auto-scale.}
 \item{turntable_frames}{Number of frames in an auto-built turntable.}
 
 \item{spin_axis}{Axis the turntable rotates about: \code{"y"} (default), \code{"x"} or \code{"z"}.}
+
+\item{points}{Optional named list of point sets drawn as circles on top of the
+neurons — e.g. neuron root points / somata. Each entry is either a static N x 3
+matrix (same every frame) or, like \code{flows}, a per-timepoint list of matrices
+(circles that move with the warp). Anything \code{\link[nat:xyzmatrix]{nat::xyzmatrix()}} accepts works.}
+
+\item{point_cols}{Named vector of fill colours for \code{points} (one per entry);
+recycled from a default palette if \code{NULL}.}
+
+\item{point_size, point_alpha, point_stroke}{Circle size, alpha and outline width.}
 }
 \value{
 The GIF path if written (needs \code{gifski}, or falls back to \code{magick}), else

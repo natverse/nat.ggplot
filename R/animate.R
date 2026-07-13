@@ -50,6 +50,13 @@
 #' @param fixed_limits If `TRUE` (default) all frames share one set of x/y limits
 #'   (spanning every frame plus the volume and targets) so moving objects don't make
 #'   the camera appear to zoom; set `FALSE` to let each frame auto-scale.
+#' @param points Optional named list of point sets drawn as circles on top of the
+#'   neurons — e.g. neuron root points / somata. Each entry is either a static N x 3
+#'   matrix (same every frame) or, like `flows`, a per-timepoint list of matrices
+#'   (circles that move with the warp). Anything [nat::xyzmatrix()] accepts works.
+#' @param point_cols Named vector of fill colours for `points` (one per entry);
+#'   recycled from a default palette if `NULL`.
+#' @param point_size,point_alpha,point_stroke Circle size, alpha and outline width.
 #' @return The GIF path if written (needs `gifski`, or falls back to `magick`), else
 #'   the vector of frame PNG paths.
 #' @seealso [geom_neuron()], [ggneuron()].
@@ -72,7 +79,9 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
                          target_alpha = 0.18, alpha = 0.6, rotation_matrix = NULL,
                          file = NULL, width = 900, height = 800, delay = 0.14,
                          dpi = 96, pingpong = TRUE, fixed_limits = TRUE,
-                         centre = NULL, turntable_frames = 36L, spin_axis = c("z", "y", "x")) {
+                         centre = NULL, turntable_frames = 36L, spin_axis = c("z", "y", "x"),
+                         points = NULL, point_cols = NULL, point_size = 3,
+                         point_alpha = 1, point_stroke = 0.8) {
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("ggneuron_gif() needs the 'ggplot2' package.", call. = FALSE)
   spin_axis <- match.arg(spin_axis)
@@ -126,6 +135,17 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
     alpha <- stats::setNames(alpha, names(flows))
 
   nt <- length(flows[[1]])
+  # Normalise `points` to one N x 3 matrix per frame per structure (static -> repeated).
+  if (!is.null(points)) {
+    points <- lapply(points, function(pp) {
+      per_frame <- if (is.list(pp) && !is.matrix(pp) &&
+                       !inherits(pp, c("neuron", "mesh3d", "dotprops"))) pp else rep(list(pp), nt)
+      lapply(per_frame, nat::xyzmatrix)
+    })
+    if (is.null(point_cols))
+      point_cols <- stats::setNames(rep(c("#C1121F", "#2E86AB", "#F3A712", "#3B7A57"),
+                                        length.out = length(points)), names(points))
+  }
   frames <- character(nt)
   fdir <- if (is.null(file)) tempdir() else dirname(file)
   dir.create(fdir, showWarnings = FALSE, recursive = TRUE)
@@ -142,7 +162,8 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
       if (!is.null(rotation_matrix)) X <- X %*% t(rotation_matrix[1:2, 1:3]) else X <- X[, 1:2, drop = FALSE]
       X
     }
-    allobj <- c(list(volume), targets, unlist(flows, recursive = FALSE))
+    allobj <- c(list(volume), targets, unlist(flows, recursive = FALSE),
+                if (!is.null(points)) unlist(points, recursive = FALSE))
     xy <- do.call(rbind, lapply(allobj, proj_xy))
     if (!is.null(xy) && nrow(xy)) {
       rx <- range(xy[, 1]); ry <- range(xy[, 2])
@@ -161,6 +182,16 @@ ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col
     for (nm in names(flows))
       p <- p + geom_neuron(flows[[nm]][[t]], rotation_matrix = rotation_matrix,
                            cols = rep(cols[[nm]], 2), alpha = alpha[[nm]])
+    # Root points / somata as filled circles on top.
+    if (!is.null(points))
+      for (nm in names(points)) {
+        P <- points[[nm]][[t]]
+        P <- if (!is.null(rotation_matrix)) P %*% t(rotation_matrix[1:2, 1:3]) else P[, 1:2, drop = FALSE]
+        p <- p + ggplot2::geom_point(
+          data = data.frame(px = P[, 1], py = P[, 2]), ggplot2::aes(x = .data$px, y = .data$py),
+          shape = 21, fill = point_cols[[nm]], colour = "grey15",
+          size = point_size, alpha = point_alpha, stroke = point_stroke)
+      }
     p <- p + ggplot2::theme_void() +
       (if (is.null(lims)) ggplot2::coord_fixed()
        else ggplot2::coord_fixed(xlim = lims$x, ylim = lims$y)) +
