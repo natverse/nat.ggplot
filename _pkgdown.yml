@@ -25,6 +25,7 @@ reference:
   - title: Plotting
     contents:
       - ggneuron
+      - ggneuron_gif
       - starts_with("geom_")
       - gganat
   - title: Utilities
