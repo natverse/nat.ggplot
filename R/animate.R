@@ -11,9 +11,20 @@
 #' and an optional set of static `targets` drawn in a transparent greyscale beneath
 #' the moving objects (e.g. the fixed shapes a warp should land on).
 #'
+#' The simplest use is a **turntable**: pass a single spatial object as `x` (a
+#' `neuron`/`neuronlist`/`mesh3d`/`hxsurf`/`dotprops`/matrix) and, with `flows` left
+#' `NULL`, it is spun about its centroid (or `centre`) to a looping rotation GIF.
+#'
+#' @param x Either a single spatial object to turn into a turntable (when `flows` is
+#'   `NULL`), or — for back-compatibility — a `flows` list passed positionally.
 #' @param flows A named list; each element is the per-timepoint list of objects for
 #'   one structure (all the same length, one entry per frame). Colours are per
-#'   structure. A single object (not a list) is treated as a one-frame "flow".
+#'   structure. If `NULL` (default) it is built from `x`: a turntable if `x` is a
+#'   single spatial object, otherwise `x` is taken to already be the flows list.
+#' @param centre Rotation centre for the turntable (length-3). Defaults to the
+#'   `volume`'s centroid if a volume is given, else `x`'s centroid.
+#' @param turntable_frames Number of frames in an auto-built turntable.
+#' @param spin_axis Axis the turntable rotates about: `"y"` (default), `"x"` or `"z"`.
 #' @param cols Named vector of colours (one per `flows` entry); recycled from a
 #'   default palette if `NULL`.
 #' @param volume Optional fixed reference object drawn under every frame (e.g. a brain
@@ -36,23 +47,64 @@
 #' @param width,height,delay,dpi GIF frame size (px), per-frame delay (s) and dpi.
 #' @param pingpong If `TRUE` (default) the frame sequence plays forward then back for
 #'   a seamless loop.
+#' @param fixed_limits If `TRUE` (default) all frames share one set of x/y limits
+#'   (spanning every frame plus the volume and targets) so moving objects don't make
+#'   the camera appear to zoom; set `FALSE` to let each frame auto-scale.
 #' @return The GIF path if written (needs `gifski`, or falls back to `magick`), else
 #'   the vector of frame PNG paths.
 #' @seealso [geom_neuron()], [ggneuron()].
 #' @examples
 #' \dontrun{
-#' # `warp` is a named list of per-timepoint mesh states from some morph.
+#' # Turntable of a single object (spun about its centroid):
+#' ggneuron_gif(banc.brain_neuropil, file = "spin.gif")
+#'
+#' # Turntable of neurons about the brain-hull centroid, brain shown translucent:
+#' ggneuron_gif(banc.skels[1:6], volume = banc.brain_neuropil,
+#'              rotation_matrix = banc_view, file = "spin.gif")
+#'
+#' # Explicit animation: `warp` is a named list of per-timepoint mesh states.
 #' ggneuron_gif(warp, volume = brain, volume_col = "lightpink",
 #'              targets = target_meshes, file = "morph.gif")
 #' }
 #' @export
-ggneuron_gif <- function(flows, cols = NULL, volume = NULL, volume_col = "grey80",
+ggneuron_gif <- function(x, flows = NULL, cols = NULL, volume = NULL, volume_col = "grey80",
                          volume_alpha = 0.12, targets = NULL, target_cols = NULL,
                          target_alpha = 0.18, alpha = 0.6, rotation_matrix = NULL,
                          file = NULL, width = 900, height = 800, delay = 0.14,
-                         dpi = 96, pingpong = TRUE) {
+                         dpi = 96, pingpong = TRUE, fixed_limits = TRUE,
+                         centre = NULL, turntable_frames = 36L, spin_axis = c("y", "x", "z")) {
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("ggneuron_gif() needs the 'ggplot2' package.", call. = FALSE)
+  spin_axis <- match.arg(spin_axis)
+  spatial <- function(o) inherits(o, c("neuron", "neuronlist", "mesh3d", "hxsurf", "dotprops")) || is.matrix(o)
+
+  # Build `flows` if not given. A single spatial `x` (neuron/neuronlist/mesh/hxsurf/...)
+  # becomes a TURNTABLE: it (and the `volume`, if any) is spun about `centre` (default
+  # the volume's, else x's, centroid) over `turntable_frames`, seamlessly looping. A
+  # flows-list passed as `x` is used as-is (back-compatible).
+  if (is.null(flows)) {
+    if (spatial(x)) {
+      ctr <- if (!is.null(centre)) centre
+             else if (!is.null(volume)) colMeans(nat::xyzmatrix(volume))
+             else colMeans(nat::xyzmatrix(x))
+      angs <- utils::head(seq(0, 2 * pi, length.out = turntable_frames + 1L), -1L)
+      Rmat <- function(th) { cc <- cos(th); ss <- sin(th); switch(spin_axis,
+        y = matrix(c(cc, 0, ss, 0, 1, 0, -ss, 0, cc), 3, byrow = TRUE),
+        x = matrix(c(1, 0, 0, 0, cc, -ss, 0, ss, cc), 3, byrow = TRUE),
+        z = matrix(c(cc, -ss, 0, ss, cc, 0, 0, 0, 1), 3, byrow = TRUE)) }
+      spin <- function(o, th) { V <- nat::xyzmatrix(o)
+        nat::xyzmatrix(o) <- sweep(sweep(V, 2, ctr) %*% t(Rmat(th)), 2, -ctr); o }
+      flows <- list()
+      if (!is.null(volume)) { flows[["volume"]] <- lapply(angs, function(th) spin(volume, th)); volume <- NULL }
+      flows[["object"]] <- lapply(angs, function(th) spin(x, th))
+      if (is.null(cols))
+        cols <- if ("volume" %in% names(flows)) list(volume = volume_col, object = "navy") else list(object = "navy")
+      if (length(alpha) == 1L && is.null(names(alpha)))
+        alpha <- if ("volume" %in% names(flows)) c(volume = volume_alpha, object = alpha) else c(object = alpha)
+      pingpong <- FALSE                       # a full rotation already loops seamlessly
+    } else flows <- x                         # `x` is already a flows-list
+  }
+
   # Allow a single object per structure (wrap as a one-frame flow).
   flows <- lapply(flows, function(f) if (is.list(f) && !inherits(f, c("neuron", "mesh3d"))) f else list(f))
   nstruct <- length(flows)
@@ -75,6 +127,25 @@ ggneuron_gif <- function(flows, cols = NULL, volume = NULL, volume_col = "grey80
   fdir <- if (is.null(file)) tempdir() else dirname(file)
   dir.create(fdir, showWarnings = FALSE, recursive = TRUE)
   file.remove(list.files(fdir, "^flowframe_[0-9]+\\.png$", full.names = TRUE))  # stale frames
+
+  # Fixed camera: compute one set of x/y limits spanning EVERY frame (plus volume and
+  # targets) so moving objects don't make each frame auto-rescale (which reads as an
+  # unwanted zoom). Projection matches geom_neuron: rows 1:2 of rotation_matrix[,1:3].
+  lims <- NULL
+  if (isTRUE(fixed_limits)) {
+    proj_xy <- function(o) {
+      if (is.null(o)) return(NULL)
+      X <- tryCatch(nat::xyzmatrix(o), error = function(e) NULL); if (is.null(X)) return(NULL)
+      if (!is.null(rotation_matrix)) X <- X %*% t(rotation_matrix[1:2, 1:3]) else X <- X[, 1:2, drop = FALSE]
+      X
+    }
+    allobj <- c(list(volume), targets, unlist(flows, recursive = FALSE))
+    xy <- do.call(rbind, lapply(allobj, proj_xy))
+    if (!is.null(xy) && nrow(xy)) {
+      rx <- range(xy[, 1]); ry <- range(xy[, 2])
+      lims <- list(x = rx + c(-1, 1) * diff(rx) * 0.03, y = ry + c(-1, 1) * diff(ry) * 0.03)
+    }
+  }
   for (t in seq_len(nt)) {
     p <- ggplot2::ggplot()
     if (!is.null(volume))
@@ -87,7 +158,9 @@ ggneuron_gif <- function(flows, cols = NULL, volume = NULL, volume_col = "grey80
     for (nm in names(flows))
       p <- p + geom_neuron(flows[[nm]][[t]], rotation_matrix = rotation_matrix,
                            cols = rep(cols[[nm]], 2), alpha = alpha[[nm]])
-    p <- p + ggplot2::theme_void() + ggplot2::coord_fixed() +
+    p <- p + ggplot2::theme_void() +
+      (if (is.null(lims)) ggplot2::coord_fixed()
+       else ggplot2::coord_fixed(xlim = lims$x, ylim = lims$y)) +
       ggplot2::theme(legend.position = "none")
     frames[t] <- file.path(fdir, sprintf("flowframe_%03d.png", t))
     ggplot2::ggsave(frames[t], p, width = width / dpi, height = height / dpi,

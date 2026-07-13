@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/natverse/nat.ggplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-![Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
+![Fly brain neuropils exploding out and back, animated with ggneuron_gif()](https://github.com/natverse/nat.ggplot/blob/main/inst/images/exploding_neuropils.gif?raw=true)
 
 # nat.ggplot
 
@@ -25,6 +25,8 @@ In the [natverse ecosystem](https://natverse.org/), neurons are represented as t
 - **Synaptic information**: Pre- and postsynaptic site locations that can be overlaid on morphology
 
 For more details, see the [natverse neurons introduction](https://natverse.org/nat/articles/neurons-intro.html)
+
+![Example circuit](https://github.com/natverse/nat.ggplot/blob/main/inst/images/banner.png?raw=true)
 
 ## Installation
 
@@ -480,30 +482,26 @@ if (requireNamespace("cowplot", quietly = TRUE)) {
 
 ### Animations
 
-`ggneuron_gif()` animates a *sequence* of object states into a GIF — a morph, a
-developmental series, or (below) a simple turntable — reusing `geom_neuron()` for each
-frame and assembling them with `gifski` (or `magick`). Each entry of `flows` is a
-per-frame list of objects; `volume`/`targets` add static context, and `alpha` may be
-given per structure (here a translucent brain around solid neurons).
+`ggneuron_gif()` turns nat objects into a GIF, reusing `geom_neuron()` for each frame
+and assembling them with `gifski` (or `magick`). All frames share one camera so moving
+objects don't appear to zoom.
+
+The simplest use is a **turntable** — pass a single spatial object (`neuron`,
+`neuronlist`, `mesh3d`, `hxsurf`, …) and it is spun about its centroid. Give a `volume`
+and it is spun too (translucent), about the volume's centroid:
 
 ``` r
-# a turntable: each "frame" is the scene rotated a little further about the vertical
-cen  <- colMeans(nat::xyzmatrix(banc.brain_neuropil))
-spin <- function(obj, th) {
-  R <- matrix(c(cos(th), -sin(th), 0, sin(th), cos(th), 0, 0, 0, 1), 3, byrow = TRUE)
-  nat::xyzmatrix(obj) <- sweep(sweep(nat::xyzmatrix(obj), 2, cen) %*% t(R), 2, -cen)
-  obj
-}
-ang <- head(seq(0, 2*pi, length.out = 19), -1)
-ggneuron_gif(
-  list(brain   = lapply(ang, function(th) spin(banc.brain_neuropil, th)),
-       neurons = lapply(ang, function(th) spin(banc.skels[1:6], th))),
-  cols  = list(brain = "grey65", neurons = "#C70E7B"),
-  alpha = c(brain = 0.10, neurons = 0.95),   # translucent brain, solid neurons
-  rotation_matrix = banc_view, pingpong = FALSE, file = "ggneuron_gif_demo.gif")
+ggneuron_gif(banc.skels, volume = banc.brain_neuropil,
+             cols = list(volume = "grey65", object = "#C70E7B"),
+             alpha = c(volume = 0.10, object = 0.95),
+             rotation_matrix = banc_view, file = "ggneuron_gif_demo.gif")
 ```
 
-![Rotating brain with neurons](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)
+For a fully custom animation, pass `flows`: a named list whose entries are per-frame
+lists of objects (a morph, a developmental series, an exploded view, …). The exploded
+neuropils at the top of this README are made this way — each `JFRC2NP` neuropil moved
+along its own trajectory (from a 2D collision relaxation) out from the brain centre and
+back, over the grey `JFRC2` hull, coloured left/right-matched.
 
 ## Acknowledgements
 
@@ -528,3 +526,7 @@ Key papers referenced in this package:
 - For issues and feature requests, please use the [GitHub issue tracker](https://github.com/natverse/nat.ggplot/issues)
 - For general natverse questions, visit the [natverse documentation]( https://natverse.org/)
 - For BANC connectome data, see the [bancr package](https://github.com/flyconnectome/bancr)
+
+---
+
+![A turntable of BANC neurons in their brain, made with ggneuron_gif()](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)

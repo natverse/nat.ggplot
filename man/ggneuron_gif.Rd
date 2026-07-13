@@ -5,7 +5,8 @@
 \title{Animate neuron/mesh objects across timepoints as a ggplot2 GIF}
 \usage{
 ggneuron_gif(
-  flows,
+  x,
+  flows = NULL,
   cols = NULL,
   volume = NULL,
   volume_col = "grey80",
@@ -20,13 +21,21 @@ ggneuron_gif(
   height = 800,
   delay = 0.14,
   dpi = 96,
-  pingpong = TRUE
+  pingpong = TRUE,
+  fixed_limits = TRUE,
+  centre = NULL,
+  turntable_frames = 36L,
+  spin_axis = c("y", "x", "z")
 )
 }
 \arguments{
+\item{x}{Either a single spatial object to turn into a turntable (when \code{flows} is
+\code{NULL}), or — for back-compatibility — a \code{flows} list passed positionally.}
+
 \item{flows}{A named list; each element is the per-timepoint list of objects for
 one structure (all the same length, one entry per frame). Colours are per
-structure. A single object (not a list) is treated as a one-frame "flow".}
+structure. If \code{NULL} (default) it is built from \code{x}: a turntable if \code{x} is a
+single spatial object, otherwise \code{x} is taken to already be the flows list.}
 
 \item{cols}{Named vector of colours (one per \code{flows} entry); recycled from a
 default palette if \code{NULL}.}
@@ -60,6 +69,17 @@ written to a temporary directory and their paths returned (no GIF assembled).}
 
 \item{pingpong}{If \code{TRUE} (default) the frame sequence plays forward then back for
 a seamless loop.}
+
+\item{fixed_limits}{If \code{TRUE} (default) all frames share one set of x/y limits
+(spanning every frame plus the volume and targets) so moving objects don't make
+the camera appear to zoom; set \code{FALSE} to let each frame auto-scale.}
+
+\item{centre}{Rotation centre for the turntable (length-3). Defaults to the
+\code{volume}'s centroid if a volume is given, else \code{x}'s centroid.}
+
+\item{turntable_frames}{Number of frames in an auto-built turntable.}
+
+\item{spin_axis}{Axis the turntable rotates about: \code{"y"} (default), \code{"x"} or \code{"z"}.}
 }
 \value{
 The GIF path if written (needs \code{gifski}, or falls back to \code{magick}), else
@@ -72,9 +92,21 @@ to a GIF, each object in its own colour, over an optional fixed reference \code{
 and an optional set of static \code{targets} drawn in a transparent greyscale beneath
 the moving objects (e.g. the fixed shapes a warp should land on).
 }
+\details{
+The simplest use is a \strong{turntable}: pass a single spatial object as \code{x} (a
+\code{neuron}/\code{neuronlist}/\code{mesh3d}/\code{hxsurf}/\code{dotprops}/matrix) and, with \code{flows} left
+\code{NULL}, it is spun about its centroid (or \code{centre}) to a looping rotation GIF.
+}
 \examples{
 \dontrun{
-# `warp` is a named list of per-timepoint mesh states from some morph.
+# Turntable of a single object (spun about its centroid):
+ggneuron_gif(banc.brain_neuropil, file = "spin.gif")
+
+# Turntable of neurons about the brain-hull centroid, brain shown translucent:
+ggneuron_gif(banc.skels[1:6], volume = banc.brain_neuropil,
+             rotation_matrix = banc_view, file = "spin.gif")
+
+# Explicit animation: `warp` is a named list of per-timepoint mesh states.
 ggneuron_gif(warp, volume = brain, volume_col = "lightpink",
              targets = target_meshes, file = "morph.gif")
 }

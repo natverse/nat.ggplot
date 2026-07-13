@@ -297,30 +297,22 @@ nat.ggplot::gganat +
 
 ### 10 — How to animate a sequence of objects as a GIF
 
-`ggneuron_gif()` renders a *sequence* of object states (a morph, a developmental
-series, or a turntable) to a GIF, reusing `geom_neuron()` for every frame. Each entry
-of `flows` is a per-frame list of objects; `volume`/`targets` add static context, and
-`alpha` may be given per structure (a translucent brain around solid neurons). The
-chunk is `eval = FALSE` (it needs `gifski` or `magick`, and writes a file); the
-resulting GIF is shown below.
+`ggneuron_gif()` renders nat objects to a GIF, reusing `geom_neuron()` for every frame,
+with one shared camera so nothing appears to zoom. The simplest use is a **turntable**:
+pass a single spatial object and it is spun about its centroid; pass a `volume` and it
+spins too, about the volume's centroid. The chunk is `eval = FALSE` (it needs `gifski`
+or `magick`, and writes a file); the resulting GIF is shown below.
 
 ```{r animate, eval = FALSE}
-# a turntable: each frame is the scene rotated a little further about the vertical
-cen  <- colMeans(nat::xyzmatrix(banc.brain_neuropil))
-spin <- function(obj, th) {
-  R <- matrix(c(cos(th), -sin(th), 0, sin(th), cos(th), 0, 0, 0, 1), 3, byrow = TRUE)
-  nat::xyzmatrix(obj) <- sweep(sweep(nat::xyzmatrix(obj), 2, cen) %*% t(R), 2, -cen)
-  obj
-}
-ang <- head(seq(0, 2 * pi, length.out = 19), -1)
-ggneuron_gif(
-  list(brain   = lapply(ang, function(th) spin(banc.brain_neuropil, th)),
-       neurons = lapply(ang, function(th) spin(banc.skels[1:6], th))),
-  cols  = list(brain = "grey65", neurons = "#C70E7B"),
-  alpha = c(brain = 0.10, neurons = 0.95),
-  rotation_matrix = banc_view, pingpong = FALSE, file = "ggneuron_gif_demo.gif")
+ggneuron_gif(banc.skels, volume = banc.brain_neuropil,
+             cols  = list(volume = "grey65", object = "#C70E7B"),
+             alpha = c(volume = 0.10, object = 0.95),
+             rotation_matrix = banc_view, file = "ggneuron_gif_demo.gif")
 ```
 
 ![Rotating brain with neurons](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)
+
+For a fully custom animation (a morph, an exploded view, …) pass `flows`: a named list
+whose entries are per-frame lists of objects. See `?ggneuron_gif`.
 
 ---
