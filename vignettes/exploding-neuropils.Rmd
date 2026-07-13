@@ -1,0 +1,94 @@
+---
+title: "An exploded view of the fly neuropils"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{An exploded view of the fly neuropils}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+The hero animation on the [nat.ggplot README](https://natverse.org/nat.ggplot/) is a
+custom `flows` animation made with `ggneuron_gif()`: every `JFRC2` neuropil moves out
+from the brain, holds, and returns — so none overlap in the view — then loops seamlessly.
+
+The interesting part is the **trajectory** of each neuropil. A naive radial push (move
+each part straight out from the brain centre) has to fling everything very far apart to
+clear the dense, depth-layered central brain, and it zooms out. Instead we compute a
+compact layout with a **2D collision relaxation** in the view plane: neuropils nudge
+apart from overlapping neighbours until none overlap. Re-imposing bilateral symmetry
+after each sweep keeps the result left-right symmetric, and pinning the midline neuropils
+to the midline makes them separate *vertically* — which is what lifts the protocerebral
+bridge clear of the fan-shaped body it otherwise projects on top of. Each neuropil then
+just travels in a straight line from its native position to its relaxed one and back.
+
+The chunk is `eval = FALSE` (it needs `nat.flybrains`, `Rvcg`, and `gifski`/`magick`,
+and writes a file); the resulting GIF is shown below.
+
+```{r packages}
+library(nat.ggplot)
+```
+
+```{r explode}
+library(nat.flybrains); library(Rvcg)
+RM <- diag(c(1, -1, 1, 1)); ex <- RM[1, 1:3]; ey <- RM[2, 1:3]   # dorsal-up view
+brain  <- Rvcg::vcgQEdecim(as.mesh3d(JFRC2.surf), tarface = 4000L)
+centre <- colMeans(nat::xyzmatrix(brain)); mid <- as.numeric(centre %*% ex)
+np <- JFRC2NP.surf
+nps <- setNames(lapply(np$RegionList, function(r)
+  tryCatch(Rvcg::vcgQEdecim(as.mesh3d(subset(np, r)), tarface = 500L), error = function(e) NULL)),
+  np$RegionList)
+nps <- nps[!vapply(nps, is.null, logical(1))]; regs <- names(nps)
+
+# project each neuropil -> 2D centroid + a compact effective radius (radius of gyration)
+proj <- function(m) t(m$vb[1:3, ]) %*% cbind(ex, ey)
+c2  <- t(sapply(nps, function(m) colMeans(proj(m))))
+rad <- vapply(regs, function(nm) { P <- proj(nps[[nm]]); 1.15 * sqrt(mean(rowSums(sweep(P, 2, colMeans(P))^2)))}, numeric(1))
+base <- sub("_(R|L|LEFT|RIGHT)$", "", regs)
+side <- ifelse(grepl("_(R|RIGHT)$", regs), "R", ifelse(grepl("_(L|LEFT)$", regs), "L", "M"))
+
+pos <- c2                                   # relax overlaps, re-imposing symmetry each sweep
+for (it in 1:1500) {
+  moved <- FALSE
+  for (i in 1:(length(regs)-1)) for (j in (i+1):length(regs)) {
+    d <- pos[i,]-pos[j,]; dd <- sqrt(sum(d^2)); need <- (rad[i]+rad[j]) * 1.02
+    if (dd < need) { u <- if (dd < 1e-6) c(cos(i),sin(i))*1e-3 else d/dd
+      p <- (need-max(dd,1e-6))/2*u; pos[i,] <- pos[i,]+p; pos[j,] <- pos[j,]-p; moved <- TRUE } }
+  for (b in unique(base)) { iR<-which(base==b&side=="R"); iL<-which(base==b&side=="L"); iM<-which(base==b&side=="M")
+    if (length(iR)==1 && length(iL)==1) { ax<-((pos[iR,1]-mid)-(pos[iL,1]-mid))/2; ay<-(pos[iR,2]+pos[iL,2])/2
+      pos[iR,]<-c(mid+ax,ay); pos[iL,]<-c(mid-ax,ay) }
+    if (length(iM)) pos[iM,1] <- mid }
+  if (!moved) break
+}
+shift <- lapply(regs, function(nm) (pos[nm,1]-c2[nm,1])*ex + (pos[nm,2]-c2[nm,2])*ey)  # 2D -> 3D
+names(shift) <- regs
+move <- function(m, s, phi) { m$vb <- rbind(t(sweep(t(m$vb[1:3,]), 2, -s*phi)), 1); m$normals <- NULL; m }
+
+# colour by functional group (L/R matched), shaded within each group, LaCroix-inspired:
+# optic = blue, SEZ = green, mushroom body = pink-purple, central complex = yellow-orange,
+# mid brain core = cerise.
+grp <- function(b) {
+  if (b %in% c("ME","AME","LO","LOP")) "optic"
+  else if (b %in% c("GNG","SAD","PRW","FLA","AMMC","IPS")) "sez"
+  else if (grepl("^MB_(CA|VL|ML|PED)$", b)) "mb"
+  else if (b %in% c("FB","EB","PB","NO","AB")) "cx"
+  else "midbrain"
+}
+grp_ramp <- list(optic=c("#1BA3C6","#B3ECF7"), sez=c("#2CB11B","#CBEFA0"),
+                 mb=c("#C1478E","#EDBFE0"), cx=c("#F5850B","#FFD24D"),
+                 midbrain=c("#C1275E","#F2A6C2"))
+groups <- vapply(base, grp, character(1)); cols <- setNames(character(length(regs)), regs)
+for (g in names(grp_ramp)) { gb <- unique(base[groups == g]); if (!length(gb)) next
+  ramp <- setNames(grDevices::colorRampPalette(grp_ramp[[g]])(length(gb)), gb)
+  cols[groups == g] <- ramp[base[groups == g]] }
+cols <- as.list(cols)
+phis <- sin(pi * seq(0, 1, length.out = 20))            # 0 -> 1 -> 0, last frame == first
+flows <- setNames(lapply(regs, function(nm) lapply(phis, function(phi) move(nps[[nm]], shift[[nm]], phi))), regs)
+ggneuron_gif(flows, cols = cols, volume = brain, volume_col = "grey70", volume_alpha = 0.10,
+             alpha = 0.9, rotation_matrix = RM, pingpong = FALSE, file = "exploding_neuropils.gif")
+```
+
+![Exploded fly neuropils](https://github.com/natverse/nat.ggplot/blob/main/inst/images/exploding_neuropils.gif?raw=true)

@@ -497,11 +497,13 @@ ggneuron_gif(banc.skels, volume = banc.brain_neuropil,
              rotation_matrix = banc_view, file = "ggneuron_gif_demo.gif")
 ```
 
+![A turntable of BANC neurons in their brain, made with ggneuron_gif()](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)
+
 For a fully custom animation, pass `flows`: a named list whose entries are per-frame
-lists of objects (a morph, a developmental series, an exploded view, …). The exploded
-neuropils at the top of this README are made this way — each `JFRC2NP` neuropil moved
-along its own trajectory (from a 2D collision relaxation) out from the brain centre and
-back, over the grey `JFRC2` hull, coloured left/right-matched.
+lists of objects (a morph, a developmental series, an exploded view, …). The **exploded
+fly neuropils** at the top of this README are made this way — see the
+[exploded-view vignette](https://natverse.org/nat.ggplot/articles/exploding-neuropils.html)
+for the full walkthrough.
 
 ## Acknowledgements
 
@@ -526,7 +528,3 @@ Key papers referenced in this package:
 - For issues and feature requests, please use the [GitHub issue tracker](https://github.com/natverse/nat.ggplot/issues)
 - For general natverse questions, visit the [natverse documentation]( https://natverse.org/)
 - For BANC connectome data, see the [bancr package](https://github.com/flyconnectome/bancr)
-
----
-
-![A turntable of BANC neurons in their brain, made with ggneuron_gif()](https://github.com/natverse/nat.ggplot/blob/main/inst/images/ggneuron_gif_demo.gif?raw=true)
