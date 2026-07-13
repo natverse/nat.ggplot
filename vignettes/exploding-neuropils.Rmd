@@ -78,8 +78,8 @@ grp <- function(b) {
   else "midbrain"
 }
 grp_ramp <- list(optic=c("#1BA3C6","#B3ECF7"), sez=c("#2CB11B","#CBEFA0"),
-                 mb=c("#C1478E","#EDBFE0"), cx=c("#F5850B","#FFD24D"),
-                 midbrain=c("#C1275E","#F2A6C2"))
+                 mb=c("#7B3FA0","#CDB0E8"), cx=c("#F5850B","#FFD24D"),
+                 midbrain=c("#C41E3A","#F2A6A6"))
 groups <- vapply(base, grp, character(1)); cols <- setNames(character(length(regs)), regs)
 for (g in names(grp_ramp)) { gb <- unique(base[groups == g]); if (!length(gb)) next
   ramp <- setNames(grDevices::colorRampPalette(grp_ramp[[g]])(length(gb)), gb)
@@ -87,6 +87,9 @@ for (g in names(grp_ramp)) { gb <- unique(base[groups == g]); if (!length(gb)) n
 cols <- as.list(cols)
 phis <- sin(pi * seq(0, 1, length.out = 20))            # 0 -> 1 -> 0, last frame == first
 flows <- setNames(lapply(regs, function(nm) lapply(phis, function(phi) move(nps[[nm]], shift[[nm]], phi))), regs)
+# draw back-to-front by view depth (world z) so layering is anatomical & symmetric L/R
+depth <- vapply(nps, function(m) mean(m$vb[3, ]), numeric(1))
+ord <- names(sort(depth, decreasing = TRUE)); flows <- flows[ord]; cols <- cols[ord]
 ggneuron_gif(flows, cols = cols, volume = brain, volume_col = "grey70", volume_alpha = 0.10,
              alpha = 0.9, rotation_matrix = RM, pingpong = FALSE, file = "exploding_neuropils.gif")
 ```
